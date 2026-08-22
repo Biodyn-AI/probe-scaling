@@ -780,26 +780,31 @@ This work was supported by Pivotal Research.
 
 \section*{Declaration of generative AI use}
 
-This declaration follows the ISCB acceptable-use policy for large language models.
+This declaration follows the ISCB acceptable-use policy for large language
+models, which this journal adopts, and the detailed account it asks for is given
+in Supplementary Note~S1.
 
-A large language model (Claude, Anthropic) was used as a coding and checking
-assistant in the computational work, under the author's direction and review, in
-the following ways. It assisted in writing and refactoring the evaluation
-harness, the analysis functions and the figure-generation code, all of which are
-released in the repository named under Data availability and are covered by the
-test suite. It was used as an evaluation technique in the sense the policy
-describes --- to search the pipeline for inconsistencies and anomalies --- which
-is how a number of the measurement defects reported in Section~\ref{sec:defects}
-were surfaced. It was used to retrieve and verify bibliographic metadata: every
-reference in this paper was resolved programmatically against doi.org or the
-arXiv API by the script \texttt{build\_bib.py}, which fails rather than emit an
-unresolvable entry. It also assisted in preparing the \LaTeX{} sources of the
-tables and figures.
+A large language model (Claude, Anthropic) was used as an assistant under the
+author's direction. Its uses map onto the policy's acceptable categories as
+follows. It assisted in \textbf{writing and refactoring code} --- the evaluation
+harness, the analysis functions and the figure-generation scripts --- all of which
+are released in the repository named under Data availability and are covered by
+its test suite. It was used \textbf{as an evaluation technique}, to search the
+pipeline for inconsistencies and anomalies; several of the measurement defects
+reported in Section~\ref{sec:defects} were surfaced that way. It was used to
+\textbf{retrieve and verify bibliographic metadata}: every reference here was
+resolved programmatically against doi.org or the arXiv API by the released script
+\texttt{build\_bib.py}, which fails rather than emit an unresolvable entry, and
+each resolved record was checked against its claimed author, title and year. It
+also \textbf{helped produce part of the text} of the manuscript and the \LaTeX{}
+sources of its tables and figures.
 
-All outputs of the assistant were reviewed by the author, and every numerical result
-reported here was re-derived from the released result cards by the analysis
-scripts in the repository named under Data availability.
-
+The author set the scope, structure and claims of the paper, made all scientific
+judgements and interpretations, and reviewed and edited every output of the
+assistant. The author takes full responsibility for the content of the article,
+including the correctness of the released code, the accuracy of the text, and the
+verification of every reference. The assistant is not, and is not claimed to be,
+an author.
 
 \bibliographystyle{plainnat}
 \bibliography{refs}
