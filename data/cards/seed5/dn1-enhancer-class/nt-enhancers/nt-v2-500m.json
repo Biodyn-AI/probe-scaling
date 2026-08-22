@@ -1,0 +1,217 @@
+{
+  "schema_version": "0.1",
+  "model": {
+    "id": "nt-v2-500m",
+    "modality": "dna",
+    "params": 493084113,
+    "checkpoint_sha256": null,
+    "release_date": "2023-07",
+    "family": "Nucleotide Transformer v2",
+    "source": "InstaDeepAI/nucleotide-transformer-v2-500m-multi-species",
+    "notes": "29 layers, hidden 1024, 6-mer tokenisation, truncated at 2048 tokens (12282 bp), float32 weights, pretrained on 850 multi-species genomes. Licence CC BY-NC-SA 4.0 (non-commercial). Sequences are upper-cased and non-ACGTN characters mapped to N before tokenisation. Sanctioned embedding = mean over all non-padding positions of the final hidden layer, including <cls>, which is the recipe on the model card. Layer embeddings = the same mean excluding <cls>."
+  },
+  "task": {
+    "id": "dn1-enhancer-class",
+    "version": "1.0",
+    "axis": [
+      "A1",
+      "A3"
+    ],
+    "metric": "macro_f1",
+    "dataset_id": "nt-enhancers",
+    "dataset_sha256": "ed9f59b787ead4057dbefeb1fe30daf98fe2e8dd7787b41740e05d983be95ef5",
+    "n_units": 8000,
+    "higher_is_better": true
+  },
+  "scores": {
+    "zero_shot": 0.439756,
+    "behavioural": 0.493894,
+    "probe": 0.484171,
+    "elicited": null,
+    "readout_budget": {
+      "n_components": 64,
+      "C": 1.0,
+      "max_iter": 2000,
+      "metric": "macro_f1"
+    },
+    "probe_best_layer": "layer-28",
+    "layer_selection": "validation",
+    "effective_width": {
+      "behavioural": 64,
+      "probe": 64,
+      "budget": 64
+    }
+  },
+  "derived": {
+    "elicitation_gap": -0.009723,
+    "recoverability": null,
+    "headroom": -0.001915
+  },
+  "baselines": {
+    "majority_class": 0.218883,
+    "gc_only": 0.402885,
+    "kmer_pca50_logreg": 0.430911,
+    "kmer_centroid": 0.44429,
+    "kmer_nearest_neighbour": 0.238504
+  },
+  "controls": {
+    "group_stratified": true,
+    "group_key": "chromosome",
+    "n_groups_train": 15,
+    "n_groups_test": 8,
+    "null": {
+      "method": "covariate-matched label permutation (10 quantile bins)",
+      "n_permutations": 1000,
+      "matched_covariate": "gc_content",
+      "p_value": 0.000999000999000999,
+      "null_mean": 0.4061490045134285,
+      "null_std": 0.005640433804109383,
+      "observed": 0.48417145146221374
+    },
+    "ceiling": {
+      "method": "empirical: best of {scaled, unscaled} x {raw, pca50, pca128} x {C=1, C=0.1} logistic regression; configuration chosen on a validation carve of the training set (validation), then refit on the full training set and scored once on test",
+      "value": 0.4929501510380523,
+      "note": "Won by scaled/pca50/C=1. Interpret model scores relative to this: at or above it, the representation adds nothing over standard supervised practice on the raw features."
+    },
+    "ceiling_not_applicable": null,
+    "extra": {
+      "grouping": "whole chromosomes held out, then test windows with a near-duplicate in training removed (>=0.50 containment over exact 24-mers)",
+      "why_not_sequence_identity": "k-mer containment at the protein track's k=5 saturates on a four-letter alphabet and merges the whole genome into one cluster; the genomic confound is locus, not homology",
+      "n_near_duplicate_pairs_total": 22,
+      "n_test_units_removed_as_near_duplicates": 0,
+      "chromosome_label_collision": {
+        "majority_class_accuracy": 0.492,
+        "group_majority_accuracy": 0.5265,
+        "excess_over_majority": 0.0345,
+        "n_groups": 23,
+        "n_single_class_groups": 0
+      },
+      "bootstrap_unit": "1000 kb genomic blocks within the held-out chromosomes; NOT the split unit, see task docstring",
+      "n_bootstrap_blocks_test": 914,
+      "n_bootstrap_usable": 2000,
+      "gap_ci95_chromosome_bootstrap": [
+        -0.026844,
+        0.008772
+      ],
+      "n_bootstrap_usable_chromosome": 500,
+      "test_chromosomes": [
+        "chr12",
+        "chr15",
+        "chr16",
+        "chr18",
+        "chr2",
+        "chr6",
+        "chr7",
+        "chrY"
+      ],
+      "elicited_curve": {},
+      "elicited_budget": {},
+      "per_layer_scores": {
+        "layer-0": 0.412303,
+        "layer-1": 0.442985,
+        "layer-2": 0.455641,
+        "layer-3": 0.459119,
+        "layer-4": 0.471005,
+        "layer-5": 0.473149,
+        "layer-6": 0.464668,
+        "layer-7": 0.474423,
+        "layer-8": 0.483091,
+        "layer-9": 0.499281,
+        "layer-10": 0.478463,
+        "layer-11": 0.490146,
+        "layer-12": 0.49039,
+        "layer-13": 0.488807,
+        "layer-14": 0.500395,
+        "layer-15": 0.494467,
+        "layer-16": 0.49122,
+        "layer-17": 0.492793,
+        "layer-18": 0.493828,
+        "layer-19": 0.496275,
+        "layer-20": 0.483855,
+        "layer-21": 0.489492,
+        "layer-22": 0.498687,
+        "layer-23": 0.494791,
+        "layer-24": 0.500365,
+        "layer-25": 0.49911,
+        "layer-26": 0.503936,
+        "layer-27": 0.493197,
+        "layer-28": 0.484171,
+        "layer-29": 0.487736,
+        "sanctioned": 0.493894
+      },
+      "per_class_f1_probe": {
+        "0": 0.716383,
+        "1": 0.687744,
+        "2": 0.048387
+      },
+      "class_balance": {
+        "0": 3936,
+        "1": 3748,
+        "2": 316
+      },
+      "test_class_balance": {
+        "0": 1289,
+        "1": 1238,
+        "2": 110
+      },
+      "class_names": {
+        "0": "no-enhancer",
+        "1": "tissue-specific-enhancer",
+        "2": "tissue-invariant-enhancer"
+      },
+      "class_names_inferred": true,
+      "split_report": {
+        "n_units_dropped": 0,
+        "labels_dropped": [],
+        "n_classes_scored": 3,
+        "n_classes_total": 3,
+        "min_label_count": 5
+      },
+      "licence": "No licence declared on the source repository (https://huggingface.co/datasets/InstaDeepAI/nucleotide_transformer_downstream_tasks_revised; its dataset-card metadata block is empty). Underlying measurements are ENCODE/SCREEN data, reusable under the ENCODE Consortium data-use policy with citation; the Nucleotide Transformer codebase that publishes the benchmark is CC BY-NC-SA 4.0 (non-commercial). Treat as non-commercial and unlicensed-in-writing.",
+      "citation": "Dalla-Torre et al., The Nucleotide Transformer: Building and Evaluating Robust Foundation Models for Human Genomics (Nature Methods 2025); benchmark revised post-review. Underlying data: ENCODE Project Consortium and ENCODE SCREEN.",
+      "window_bp": 400,
+      "n_duplicate_loci_dropped_by_loader": 253,
+      "gc_mean": 0.423599,
+      "adapter_unk_fraction": 0.0,
+      "adapter_unk_fraction_note": null,
+      "ceiling_interpretation": "comparator, not a bound: k-mer composition is a strong but far-from-perfect method for enhancer identification, so a model above this value is doing well rather than saturating"
+    }
+  },
+  "uncertainty": {
+    "ci95": [
+      0.46336695627329805,
+      0.5058249842366761
+    ],
+    "n_bootstrap": 2000,
+    "std": 0.011074485457165974,
+    "gap_ci95": [
+      -0.032564265873548985,
+      0.010640942134539056
+    ],
+    "gap_positive_fraction": 0.192,
+    "rank_reversal_risk": {}
+  },
+  "compute": {
+    "device": "cuda",
+    "seconds": 340.23,
+    "gpu_hours": null,
+    "peak_memory_gb": null
+  },
+  "provenance": {
+    "code_commit": null,
+    "run_id": "2d091ad1f0d8",
+    "run_date": "2026-08-21T21:26:54+00:00",
+    "seed": 5,
+    "env_lock_sha256": null,
+    "harness_version": "1.0"
+  },
+  "disclosure_tier": 0,
+  "caveats": [
+    "Exceeds the empirical ceiling (0.493): the representation adds over the best cheap supervised readout of k-mer composition. On this task that is a good outcome rather than saturation, because k-mer composition cannot nearly solve enhancer identification, so the ceiling is a comparator and not an attainable maximum. `derived.headroom` is therefore negative and must not be read as headroom on DN1.",
+    "Elicitation gap -0.0097 has a paired 95% interval [-0.0326, +0.0106] spanning zero (positive in 19% of block resamples); not distinguishable from no gap on this dataset.",
+    "The 95% intervals resample megabase blocks, not chromosomes. The split leaves 8 test chromosome(s), too few to resample honestly, so the interval covers variation across loci within them and not the variance of the chromosome holdout itself; the chromosome-level gap interval, in controls.extra, is [-0.0268, +0.0088].",
+    "Class names are inferred, not documented: the source repository labels the classes 0/1/2 without saying which is which. The no-enhancer class is pinned by joining to the sibling binary task; which of the two enhancer classes is tissue-invariant is inferred from their sizes. If that is backwards the two names swap and no score changes.",
+    "Data licence: No licence declared on the source repository (https://huggingface.co/datasets/InstaDeepAI/nucleotide_transformer_downstream_tasks_revised; its dataset-card metadata block is empty). Underlying measurements are ENCODE/SCREEN data, reusable under the ENCODE Consortium data-use policy with citation; the Nucleotide Transformer codebase that publishes the benchmark is CC BY-NC-SA 4.0 (non-commercial). Treat as non-commercial and unlicensed-in-writing.",
+    "Fine-tuning (F) not measured: adapter does not support it."
+  ]
+}

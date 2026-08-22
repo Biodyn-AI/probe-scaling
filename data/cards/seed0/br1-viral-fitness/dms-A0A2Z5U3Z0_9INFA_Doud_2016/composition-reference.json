@@ -1,0 +1,133 @@
+{
+  "schema_version": "0.1",
+  "model": {
+    "id": "composition-reference",
+    "modality": "protein",
+    "params": 0,
+    "checkpoint_sha256": null,
+    "release_date": null,
+    "family": null,
+    "source": "probe.adapters.reference.CompositionReference",
+    "notes": "Not a foundation model. Amino-acid (20) and dipeptide (400) frequencies, the reference every protein model must beat."
+  },
+  "task": {
+    "id": "br1-viral-fitness",
+    "version": "1.0",
+    "axis": [
+      "A1",
+      "A5"
+    ],
+    "metric": "macro_f1",
+    "dataset_id": "dms-A0A2Z5U3Z0_9INFA_Doud_2016",
+    "dataset_sha256": "c8db3c8d9922fe8e58653cda11484163f4885db17f9b7b66cdda0cbf4d3412e1",
+    "n_units": 1500,
+    "higher_is_better": true
+  },
+  "scores": {
+    "zero_shot": 0.512271,
+    "behavioural": 0.537449,
+    "probe": 0.537449,
+    "elicited": null,
+    "readout_budget": {
+      "n_components": 64,
+      "C": 1.0,
+      "max_iter": 2000,
+      "metric": "macro_f1"
+    },
+    "probe_best_layer": "composition",
+    "layer_selection": "validation",
+    "effective_width": {
+      "behavioural": 64,
+      "probe": 64,
+      "budget": 64
+    }
+  },
+  "derived": {
+    "elicitation_gap": 0.0,
+    "recoverability": null,
+    "headroom": -0.033575
+  },
+  "baselines": {
+    "majority_class": 0.302326,
+    "position_only": 0.302326,
+    "composition_pca50_logreg": 0.302326,
+    "composition_centroid": 0.512271
+  },
+  "controls": {
+    "group_stratified": true,
+    "group_key": "position",
+    "n_groups_train": 369,
+    "n_groups_test": 156,
+    "null": {
+      "method": "covariate-matched label permutation (10 quantile bins)",
+      "n_permutations": 1000,
+      "matched_covariate": "mutated_position",
+      "p_value": 0.09090909090909091,
+      "null_mean": 0.5048319053331707,
+      "null_std": 0.023371378853523195,
+      "observed": 0.5374488525173458
+    },
+    "ceiling": {
+      "method": "empirical: best of {scaled, unscaled} x {raw, pca50, pca128} x {C=1, C=0.1} logistic regression; configuration chosen on a validation carve of the training set (validation), then refit on the full training set and scored once on test",
+      "value": 0.5199905183312263,
+      "note": "Won by scaled/pca128/C=1. Interpret model scores relative to this: at or above it, the representation adds nothing over standard supervised practice on the raw features."
+    },
+    "ceiling_not_applicable": null,
+    "extra": {
+      "clustering": "position-disjoint: mutations at a given residue are confined to one side of the split, so the probe cannot score by learning which positions matter",
+      "n_clusters_total": 525,
+      "elicited_curve": {},
+      "elicited_budget": {},
+      "per_layer_scores": {
+        "composition": 0.537449
+      },
+      "class_balance": {
+        "0": 750,
+        "1": 750
+      },
+      "split_report": {
+        "n_units_dropped": 0,
+        "labels_dropped": [],
+        "n_classes_scored": 2,
+        "n_classes_total": 2,
+        "min_label_count": 5
+      },
+      "n_bootstrap_usable": 2000
+    }
+  },
+  "uncertainty": {
+    "ci95": [
+      0.48359618140146005,
+      0.5905539179651692
+    ],
+    "n_bootstrap": 2000,
+    "std": 0.026897034214983642,
+    "gap_ci95": [
+      0.0,
+      0.0
+    ],
+    "gap_positive_fraction": 0.0,
+    "rank_reversal_risk": {}
+  },
+  "compute": {
+    "device": "cpu",
+    "seconds": 16.77,
+    "gpu_hours": null,
+    "peak_memory_gb": null
+  },
+  "provenance": {
+    "code_commit": null,
+    "run_id": "f6d207f3da07",
+    "run_date": "2026-08-18T10:13:49+00:00",
+    "seed": 0,
+    "env_lock_sha256": null,
+    "harness_version": "1.0"
+  },
+  "disclosure_tier": 0,
+  "caveats": [
+    "Does not survive the position-matched null (p=0.091); treat the score as unsupported.",
+    "Exceeds the empirical ceiling (0.520): the representation adds over the best cheap supervised readout of composition features.",
+    "No elicitation gap by construction: the best internal layer is the sanctioned surface.",
+    "Fine-tuning (F) not measured: adapter does not support it."
+  ]
+}

@@ -1,0 +1,122 @@
+{
+  "schema_version": "0.1",
+  "model": {
+    "id": "pca-reference-32",
+    "modality": "single-cell",
+    "params": 0,
+    "checkpoint_sha256": null,
+    "release_date": null,
+    "family": null,
+    "source": "probe.adapters.reference.PCAReference",
+    "notes": "Not a foundation model. Included as the reference every model must beat before its score means anything."
+  },
+  "task": {
+    "id": "sc4-donor-invariance",
+    "version": "1.0",
+    "axis": [
+      "A8"
+    ],
+    "metric": "donor_macro_f1_lower_is_better",
+    "dataset_id": "ts-immune-20k",
+    "dataset_sha256": "4322da8dd164ac32f30a5f5f6039c3bd75375e4b17ef4ac99fd3d70a080c543a",
+    "n_units": 7986,
+    "higher_is_better": false
+  },
+  "scores": {
+    "zero_shot": 0.347274,
+    "behavioural": 0.407332,
+    "probe": 0.539205,
+    "elicited": null,
+    "readout_budget": {
+      "n_components": 64,
+      "C": 1.0,
+      "max_iter": 2000,
+      "metric": "macro_f1"
+    },
+    "probe_best_layer": "hvg-scaled",
+    "layer_selection": "validation",
+    "effective_width": {
+      "behavioural": 32,
+      "probe": 64,
+      "budget": 64
+    }
+  },
+  "derived": {
+    "elicitation_gap": 0.131873,
+    "recoverability": null,
+    "headroom": null
+  },
+  "baselines": {
+    "raw_expression_same_budget": 0.53858,
+    "library_size_only": 0.024946,
+    "pca50_logreg": 0.655611
+  },
+  "controls": {
+    "group_stratified": false,
+    "group_key": null,
+    "n_groups_train": null,
+    "n_groups_test": 15,
+    "null": {
+      "method": "covariate-matched label permutation (10 quantile bins)",
+      "n_permutations": 1000,
+      "matched_covariate": "total_counts",
+      "p_value": 0.000999000999000999,
+      "null_mean": 0.03499784714921627,
+      "null_std": 0.003752950344844056,
+      "observed": 0.5392052118807664
+    },
+    "ceiling": {
+      "method": "empirical: best of {scaled, unscaled} x {raw, pca50, pca128} x {C=1, C=0.1} logistic regression; configuration chosen on a validation carve of the training set (validation), then refit on the full training set and scored once on test",
+      "value": 0.7804737548304228,
+      "note": "Won by unscaled/raw/C=0.1. Interpret model scores relative to this: at or above it, the representation adds nothing over standard supervised practice on the raw features."
+    },
+    "ceiling_not_applicable": null,
+    "extra": {
+      "why_not_group_stratified": "predicting donor identity requires donors on both sides of the split, so a donor-disjoint split is impossible by construction. Cells are split within each donor instead.",
+      "donor_retention": 1.0012,
+      "donor_retention_denominator": 0.53858,
+      "donor_retention_note": "model donor decodability divided by raw-expression donor decodability under the identical readout budget. >1 means the representation surfaces more donor identity than raw expression does at the same capacity.",
+      "retention_vs_unbudgeted_ceiling": 0.6909,
+      "per_layer_scores": {
+        "hvg-scaled": 0.539205,
+        "pca-32": 0.407332,
+        "pca-128": 0.478447
+      },
+      "n_donors": 15
+    }
+  },
+  "uncertainty": {
+    "ci95": [
+      0.5040401982035899,
+      0.5684443129012834
+    ],
+    "n_bootstrap": 2000,
+    "std": 0.016622602251641982,
+    "gap_ci95": [
+      0.10007778361183829,
+      0.1636912510363917
+    ],
+    "gap_positive_fraction": 1.0,
+    "rank_reversal_risk": {}
+  },
+  "compute": {
+    "device": "cpu",
+    "seconds": 7461.24,
+    "gpu_hours": null,
+    "peak_memory_gb": null
+  },
+  "provenance": {
+    "code_commit": "dc64557",
+    "run_id": "71ce30ebc282",
+    "run_date": "2026-08-17T12:23:14+00:00",
+    "seed": 0,
+    "env_lock_sha256": null,
+    "harness_version": "1.0"
+  },
+  "disclosure_tier": 0,
+  "caveats": [
+    "Lower is better on this task: the score is how well donor identity can be read out of the representation.",
+    "Surfaces 100% of the donor identity that raw expression yields at the same readout capacity -- it makes donor *more* decodable than the untransformed data does, not less.",
+    "Internals leak more donor identity than the sanctioned surface does, so the sanctioned surface is hiding nuisance structure rather than removing it."
+  ]
+}

@@ -1,0 +1,135 @@
+{
+  "schema_version": "0.1",
+  "model": {
+    "id": "composition-reference",
+    "modality": "protein",
+    "params": 0,
+    "checkpoint_sha256": null,
+    "release_date": null,
+    "family": null,
+    "source": "probe.adapters.reference.CompositionReference",
+    "notes": "Not a foundation model. Amino-acid (20) and dipeptide (400) frequencies, the reference every protein model must beat."
+  },
+  "task": {
+    "id": "br1-viral-fitness",
+    "version": "1.0",
+    "axis": [
+      "A1",
+      "A5"
+    ],
+    "metric": "macro_f1",
+    "dataset_id": "dms-ENV_HV1BR_Haddox_2016",
+    "dataset_sha256": "15d85ace8df6f57b3e9d5a03f60a9d094441b3389562dbbad65773fec53a3257",
+    "n_units": 1500,
+    "higher_is_better": true
+  },
+  "scores": {
+    "zero_shot": 0.549668,
+    "behavioural": 0.51657,
+    "probe": 0.51657,
+    "elicited": null,
+    "readout_budget": {
+      "n_components": 64,
+      "C": 1.0,
+      "max_iter": 2000,
+      "metric": "macro_f1"
+    },
+    "probe_best_layer": "composition",
+    "layer_selection": "validation",
+    "effective_width": {
+      "behavioural": 64,
+      "probe": 64,
+      "budget": 64
+    }
+  },
+  "derived": {
+    "elicitation_gap": 0.0,
+    "recoverability": null,
+    "headroom": -0.007725
+  },
+  "baselines": {
+    "majority_class": 0.321805,
+    "position_only": 0.527568,
+    "composition_pca50_logreg": 0.321805,
+    "composition_centroid": 0.549668
+  },
+  "controls": {
+    "group_stratified": true,
+    "group_key": "position",
+    "n_groups_train": 437,
+    "n_groups_test": 184,
+    "null": {
+      "method": "covariate-matched label permutation (10 quantile bins)",
+      "n_permutations": 1000,
+      "matched_covariate": "mutated_position",
+      "p_value": 0.2177822177822178,
+      "null_mean": 0.4985530122220475,
+      "null_std": 0.023689157114880382,
+      "observed": 0.516570293446621
+    },
+    "ceiling": {
+      "method": "empirical: best of {scaled, unscaled} x {raw, pca50, pca128} x {C=1, C=0.1} logistic regression; configuration chosen on a validation carve of the training set (validation), then refit on the full training set and scored once on test",
+      "value": 0.5454545454545454,
+      "note": "Won by scaled/pca50/C=1. Interpret model scores relative to this: at or above it, the representation adds nothing over standard supervised practice on the raw features."
+    },
+    "ceiling_not_applicable": null,
+    "extra": {
+      "clustering": "position-disjoint: mutations at a given residue are confined to one side of the split, so the probe cannot score by learning which positions matter",
+      "n_clusters_total": 621,
+      "elicited_curve": {},
+      "elicited_budget": {},
+      "per_layer_scores": {
+        "composition": 0.51657
+      },
+      "class_balance": {
+        "0": 744,
+        "1": 756
+      },
+      "split_report": {
+        "n_units_dropped": 0,
+        "labels_dropped": [],
+        "n_classes_scored": 2,
+        "n_classes_total": 2,
+        "min_label_count": 5
+      },
+      "n_bootstrap_usable": 2000
+    }
+  },
+  "uncertainty": {
+    "ci95": [
+      0.4672299341206849,
+      0.5647926160799382
+    ],
+    "n_bootstrap": 2000,
+    "std": 0.024947075617193188,
+    "gap_ci95": [
+      0.0,
+      0.0
+    ],
+    "gap_positive_fraction": 0.0,
+    "rank_reversal_risk": {}
+  },
+  "compute": {
+    "device": "cpu",
+    "seconds": 16.62,
+    "gpu_hours": null,
+    "peak_memory_gb": null
+  },
+  "provenance": {
+    "code_commit": null,
+    "run_id": "392ee309fde6",
+    "run_date": "2026-08-18T10:23:44+00:00",
+    "seed": 0,
+    "env_lock_sha256": null,
+    "harness_version": "1.0"
+  },
+  "disclosure_tier": 0,
+  "caveats": [
+    "Does not beat the composition_centroid baseline (0.550): the representation adds nothing over cheap sequence composition.",
+    "Position alone reaches 0.528 macro-F1: much of this task is which residue was hit, not what it was changed to.",
+    "Does not survive the position-matched null (p=0.218); treat the score as unsupported.",
+    "Exceeds the empirical ceiling (0.545): the representation adds over the best cheap supervised readout of composition features.",
+    "No elicitation gap by construction: the best internal layer is the sanctioned surface.",
+    "Fine-tuning (F) not measured: adapter does not support it."
+  ]
+}

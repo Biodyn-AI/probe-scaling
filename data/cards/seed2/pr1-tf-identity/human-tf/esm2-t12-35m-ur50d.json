@@ -1,0 +1,146 @@
+{
+  "schema_version": "0.1",
+  "model": {
+    "id": "esm2-t12-35m-ur50d",
+    "modality": "protein",
+    "params": 35000000,
+    "checkpoint_sha256": null,
+    "release_date": "2022-08",
+    "family": "ESM2",
+    "source": "facebook/esm2_t12_35M_UR50D",
+    "notes": "12 layers, hidden 480, truncated at 1022 residues, float32 weights. Protein embedding = mean over residue positions, excluding <cls>, <eos> and padding."
+  },
+  "task": {
+    "id": "pr1-tf-identity",
+    "version": "1.0",
+    "axis": [
+      "A1",
+      "A5"
+    ],
+    "metric": "macro_f1",
+    "dataset_id": "human-tf",
+    "dataset_sha256": "1b11c383d009a7c4b6ad7e33b81d5ecebe5789e5bc3368b29b54f31b093879b9",
+    "n_units": 2400,
+    "higher_is_better": true
+  },
+  "scores": {
+    "zero_shot": 0.838267,
+    "behavioural": 0.865253,
+    "probe": 0.888418,
+    "elicited": null,
+    "readout_budget": {
+      "n_components": 64,
+      "C": 1.0,
+      "max_iter": 2000,
+      "metric": "macro_f1"
+    },
+    "probe_best_layer": "layer-6",
+    "layer_selection": "validation",
+    "effective_width": {
+      "behavioural": 64,
+      "probe": 64,
+      "budget": 64
+    }
+  },
+  "derived": {
+    "elicitation_gap": 0.023165,
+    "recoverability": null,
+    "headroom": -0.115658
+  },
+  "baselines": {
+    "majority_class": 0.425837,
+    "length_only": 0.425837,
+    "composition_pca50_logreg": 0.624979,
+    "composition_centroid": 0.776536,
+    "homology_nearest_neighbour": 0.893451
+  },
+  "controls": {
+    "group_stratified": true,
+    "group_key": "homology_cluster",
+    "n_groups_train": 1088,
+    "n_groups_test": 543,
+    "null": {
+      "method": "covariate-matched label permutation (10 quantile bins)",
+      "n_permutations": 1000,
+      "matched_covariate": "sequence_length",
+      "p_value": 0.000999000999000999,
+      "null_mean": 0.45151780863838054,
+      "null_std": 0.019024225612172062,
+      "observed": 0.888417853143497
+    },
+    "ceiling": {
+      "method": "empirical: best of {scaled, unscaled} x {raw, pca50, pca128} x {C=1, C=0.1} logistic regression; configuration chosen on a validation carve of the training set (validation), then refit on the full training set and scored once on test",
+      "value": 0.7963172985027078,
+      "note": "Won by scaled/pca128/C=1. Interpret model scores relative to this: at or above it, the representation adds nothing over standard supervised practice on the raw features."
+    },
+    "ceiling_not_applicable": null,
+    "extra": {
+      "clustering": "DIAMOND all-vs-all, single-linkage at >=30% identity and >=50% query coverage",
+      "n_clusters_total": 1631,
+      "elicited_curve": {},
+      "elicited_budget": {},
+      "per_layer_scores": {
+        "layer-0": 0.757158,
+        "layer-1": 0.806141,
+        "layer-2": 0.834811,
+        "layer-3": 0.842167,
+        "layer-4": 0.868846,
+        "layer-5": 0.845754,
+        "layer-6": 0.888418,
+        "layer-7": 0.897592,
+        "layer-8": 0.896674,
+        "layer-9": 0.899216,
+        "layer-10": 0.892017,
+        "layer-11": 0.911044,
+        "layer-12": 0.865253
+      },
+      "class_balance": {
+        "TF": 800,
+        "non-TF": 1600
+      },
+      "split_report": {
+        "n_units_dropped": 0,
+        "labels_dropped": [],
+        "n_classes_scored": 2,
+        "n_classes_total": 2,
+        "min_label_count": 5
+      },
+      "n_bootstrap_usable": 2000
+    }
+  },
+  "uncertainty": {
+    "ci95": [
+      0.8558375571506707,
+      0.9151370946342562
+    ],
+    "n_bootstrap": 2000,
+    "std": 0.015375259694466927,
+    "gap_ci95": [
+      -0.004887102266647519,
+      0.05179440109892185
+    ],
+    "gap_positive_fraction": 0.949,
+    "rank_reversal_risk": {}
+  },
+  "compute": {
+    "device": "cuda",
+    "seconds": 85.0,
+    "gpu_hours": null,
+    "peak_memory_gb": null
+  },
+  "provenance": {
+    "code_commit": null,
+    "run_id": "2184ca34b671",
+    "run_date": "2026-08-21T15:13:34+00:00",
+    "seed": 2,
+    "env_lock_sha256": null,
+    "harness_version": "1.0"
+  },
+  "disclosure_tier": 0,
+  "caveats": [
+    "Does not beat the homology_nearest_neighbour baseline (0.893): a similarity lookup against the training set already does this, so the representation is not adding transferable signal.",
+    "Exceeds the empirical ceiling (0.796): the representation adds over the best cheap supervised readout of composition features.",
+    "Elicitation gap +0.0232 has a paired 95% interval [-0.0049, +0.0518] spanning zero (positive in 95% of cluster resamples); not distinguishable from no gap on this dataset.",
+    "Fine-tuning (F) not measured: adapter does not support it."
+  ]
+}

@@ -1,0 +1,221 @@
+{
+  "targets": [
+    0.4,
+    0.45,
+    0.5
+  ],
+  "grid": [
+    50,
+    71,
+    100,
+    141,
+    200,
+    283,
+    400
+  ],
+  "seed": 1,
+  "mode": "sweep",
+  "models": {
+    "esm2-8m": {
+      "curve": {
+        "50": 0.369043,
+        "71": 0.371197,
+        "100": 0.390391,
+        "141": 0.420077,
+        "200": 0.44622,
+        "283": 0.482482,
+        "400": 0.481214
+      },
+      "n_runs": 7,
+      "crossings": {
+        "0.40": {
+          "steps_to_target": 141,
+          "steps_interpolated": 111.8,
+          "censored": false,
+          "monotone": false,
+          "inversions": [
+            {
+              "lower_steps": 283,
+              "lower_score": 0.482482,
+              "higher_steps": 400,
+              "higher_score": 0.481214
+            }
+          ]
+        },
+        "0.45": {
+          "steps_to_target": 283,
+          "steps_interpolated": 207.4,
+          "censored": false,
+          "monotone": false,
+          "inversions": [
+            {
+              "lower_steps": 283,
+              "lower_score": 0.482482,
+              "higher_steps": 400,
+              "higher_score": 0.481214
+            }
+          ]
+        },
+        "0.50": {
+          "steps_to_target": null,
+          "steps_interpolated": null,
+          "censored": true,
+          "monotone": false,
+          "inversions": [
+            {
+              "lower_steps": 283,
+              "lower_score": 0.482482,
+              "higher_steps": 400,
+              "higher_score": 0.481214
+            }
+          ]
+        }
+      },
+      "params": 8000000
+    },
+    "esm2-35m": {
+      "curve": {
+        "50": 0.387243,
+        "71": 0.416333,
+        "100": 0.448808,
+        "141": 0.460606,
+        "200": 0.490946,
+        "283": 0.500727,
+        "400": 0.529355
+      },
+      "n_runs": 7,
+      "crossings": {
+        "0.40": {
+          "steps_to_target": 71,
+          "steps_interpolated": 58.3,
+          "censored": false,
+          "monotone": true,
+          "inversions": []
+        },
+        "0.45": {
+          "steps_to_target": 141,
+          "steps_interpolated": 103.5,
+          "censored": false,
+          "monotone": true,
+          "inversions": []
+        },
+        "0.50": {
+          "steps_to_target": 283,
+          "steps_interpolated": 275.8,
+          "censored": false,
+          "monotone": true,
+          "inversions": []
+        }
+      },
+      "params": 35000000
+    },
+    "esm2-150m": {
+      "curve": {
+        "50": 0.347769,
+        "71": 0.382758,
+        "100": 0.39532,
+        "141": 0.423433,
+        "200": 0.451349,
+        "283": 0.508621,
+        "400": 0.558272
+      },
+      "n_runs": 7,
+      "crossings": {
+        "0.40": {
+          "steps_to_target": 141,
+          "steps_interpolated": 105.9,
+          "censored": false,
+          "monotone": true,
+          "inversions": []
+        },
+        "0.45": {
+          "steps_to_target": 200,
+          "steps_interpolated": 196.7,
+          "censored": false,
+          "monotone": true,
+          "inversions": []
+        },
+        "0.50": {
+          "steps_to_target": 283,
+          "steps_interpolated": 268.6,
+          "censored": false,
+          "monotone": true,
+          "inversions": []
+        }
+      },
+      "params": 150000000
+    },
+    "esm2-650m": {
+      "curve": {
+        "50": 0.343383,
+        "71": 0.409974,
+        "100": 0.458569,
+        "141": 0.472096,
+        "200": 0.487395,
+        "283": 0.51901,
+        "400": 0.583423
+      },
+      "n_runs": 7,
+      "crossings": {
+        "0.40": {
+          "steps_to_target": 71,
+          "steps_interpolated": 67.4,
+          "censored": false,
+          "monotone": true,
+          "inversions": []
+        },
+        "0.45": {
+          "steps_to_target": 100,
+          "steps_interpolated": 94.1,
+          "censored": false,
+          "monotone": true,
+          "inversions": []
+        },
+        "0.50": {
+          "steps_to_target": 283,
+          "steps_interpolated": 229.7,
+          "censored": false,
+          "monotone": true,
+          "inversions": []
+        }
+      },
+      "params": 650000000
+    },
+    "esm2-3b": {
+      "curve": {
+        "50": 0.335932,
+        "71": 0.423418,
+        "100": 0.467472,
+        "141": 0.498533,
+        "200": 0.543952,
+        "283": 0.545772,
+        "400": 0.568281
+      },
+      "n_runs": 7,
+      "crossings": {
+        "0.40": {
+          "steps_to_target": 71,
+          "steps_interpolated": 64.6,
+          "censored": false,
+          "monotone": true,
+          "inversions": []
+        },
+        "0.45": {
+          "steps_to_target": 100,
+          "steps_interpolated": 87.3,
+          "censored": false,
+          "monotone": true,
+          "inversions": []
+        },
+        "0.50": {
+          "steps_to_target": 200,
+          "steps_interpolated": 142.6,
+          "censored": false,
+          "monotone": true,
+          "inversions": []
+        }
+      },
+      "params": 3000000000
+    }
+  }
+}

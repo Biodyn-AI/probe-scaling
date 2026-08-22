@@ -1,0 +1,130 @@
+{
+  "schema_version": "0.1",
+  "model": {
+    "id": "geneformer-v2-104m",
+    "modality": "single-cell",
+    "params": 104000000,
+    "checkpoint_sha256": null,
+    "release_date": null,
+    "family": null,
+    "source": "ctheodoris/Geneformer/Geneformer-V2-104M",
+    "notes": "Rank-value encoding, max_len=2048, 12 layers, hidden 768. Cell embedding = mean over gene tokens, excluding special tokens."
+  },
+  "task": {
+    "id": "sc1-celltype-transfer",
+    "version": "1.0",
+    "axis": [
+      "A1",
+      "A3"
+    ],
+    "metric": "macro_f1",
+    "dataset_id": "ts-immune-20k",
+    "dataset_sha256": "4322da8dd164ac32f30a5f5f6039c3bd75375e4b17ef4ac99fd3d70a080c543a",
+    "n_units": 7947,
+    "higher_is_better": true
+  },
+  "scores": {
+    "zero_shot": 0.559177,
+    "behavioural": 0.568825,
+    "probe": 0.568825,
+    "elicited": null,
+    "readout_budget": {
+      "n_components": 64,
+      "C": 1.0,
+      "max_iter": 2000,
+      "metric": "macro_f1"
+    },
+    "probe_best_layer": "layer-12",
+    "layer_selection": "validation",
+    "effective_width": {
+      "behavioural": 64,
+      "probe": 64,
+      "budget": 64
+    }
+  },
+  "derived": {
+    "elicitation_gap": 0.0,
+    "recoverability": null,
+    "headroom": -0.023132
+  },
+  "baselines": {
+    "majority_class": 0.015011,
+    "library_size_only": 0.018342,
+    "pca50_logreg": 0.555965,
+    "nearest_centroid_raw": 0.549885
+  },
+  "controls": {
+    "group_stratified": true,
+    "group_key": "donor_id",
+    "n_groups_train": 14,
+    "n_groups_test": 8,
+    "null": {
+      "method": "covariate-matched label permutation (10 quantile bins)",
+      "n_permutations": 1000,
+      "matched_covariate": "total_counts",
+      "p_value": 0.000999000999000999,
+      "null_mean": 0.06637713335980275,
+      "null_std": 0.003823664714551485,
+      "observed": 0.5688252472612587
+    },
+    "ceiling": {
+      "method": "empirical: best of {scaled, unscaled} x {raw, pca50, pca128} x {C=1, C=0.1} logistic regression; configuration chosen on a validation carve of the training set (validation), then refit on the full training set and scored once on test",
+      "value": 0.555964542195901,
+      "note": "Won by unscaled/pca50/C=1. Interpret model scores relative to this: at or above it, the representation adds nothing over standard supervised practice on the raw features."
+    },
+    "ceiling_not_applicable": null,
+    "extra": {
+      "per_layer_scores": {
+        "layer-0": 0.512484,
+        "layer-1": 0.534866,
+        "layer-2": 0.53987,
+        "layer-3": 0.551451,
+        "layer-4": 0.573356,
+        "layer-5": 0.56392,
+        "layer-6": 0.55705,
+        "layer-7": 0.568129,
+        "layer-8": 0.552538,
+        "layer-9": 0.579329,
+        "layer-10": 0.550896,
+        "layer-11": 0.563775,
+        "layer-12": 0.568825
+      },
+      "n_labels": 21,
+      "n_bootstrap_usable": 2000
+    }
+  },
+  "uncertainty": {
+    "ci95": [
+      0.39767264794374685,
+      0.5786947924440644
+    ],
+    "n_bootstrap": 2000,
+    "std": 0.04561431452462086,
+    "gap_ci95": [
+      0.0,
+      0.0
+    ],
+    "gap_positive_fraction": 0.0,
+    "rank_reversal_risk": {}
+  },
+  "compute": {
+    "device": "unloaded",
+    "seconds": 2500.64,
+    "gpu_hours": null,
+    "peak_memory_gb": null
+  },
+  "provenance": {
+    "code_commit": "08626c8",
+    "run_id": "e7103f43b651",
+    "run_date": "2026-08-17T06:52:03+00:00",
+    "seed": 0,
+    "env_lock_sha256": null,
+    "harness_version": "1.0"
+  },
+  "disclosure_tier": 0,
+  "caveats": [
+    "Exceeds the empirical ceiling (0.556): the representation adds over the best cheap supervised readout of raw features. Either genuine added value or too narrow a ceiling sweep \u2014 worth rechecking with a wider sweep before the claim is leaned on.",
+    "No elicitation gap by construction: the best internal layer is the sanctioned surface. This model exposes no separate internals to probe.",
+    "Fine-tuning (F) not measured: adapter does not support it."
+  ]
+}

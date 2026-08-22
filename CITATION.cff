@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use this code or these measurements, please cite the paper."
+title: "Same probe, different depths: how the gap between output and internals scales in biological foundation models"
+abstract: >-
+  Reproduction code and released result cards for a study of how the
+  elicitation gap -- the difference between a biological foundation model's
+  sanctioned output and a linear probe of its best internal layer, read at
+  identical capacity -- scales with model size across five tasks, two
+  modalities and four model families.
+authors:
+  - family-names: Kendiukhov
+    given-names: Ihor
+    email: ihor.kendiukhov@student.uni-tuebingen.de
+    affiliation: "Institute of Medical Genetics and Applied Genomics, University of Tübingen"
+repository-code: "https://github.com/Biodyn-AI/probe-scaling"
+license: MIT
+version: "1.0.0"
+date-released: "2026-08-22"
+keywords:
+  - protein language models
+  - model evaluation
+  - scaling
+  - linear probing
+  - capability elicitation
+  - reproducibility

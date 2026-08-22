@@ -1,0 +1,183 @@
+{
+  "schema_version": "0.1",
+  "model": {
+    "id": "esm2-t36-3b-ur50d",
+    "modality": "protein",
+    "params": 3000000000,
+    "checkpoint_sha256": null,
+    "release_date": "2022-08",
+    "family": "ESM2",
+    "source": "facebook/esm2_t36_3B_UR50D",
+    "notes": "36 layers, hidden 2560, truncated at 1022 residues, float32 weights. Protein embedding = mean over residue positions, excluding <cls>, <eos> and padding."
+  },
+  "task": {
+    "id": "pr2-tf-family",
+    "version": "1.0",
+    "axis": [
+      "A1",
+      "A5"
+    ],
+    "metric": "macro_f1",
+    "dataset_id": "human-tf-family",
+    "dataset_sha256": "dac8a5c602a40e6ea7d6100b1309615b3ddcedd3ea8c15478b0bbc9c5b12ff48",
+    "n_units": 1102,
+    "higher_is_better": true
+  },
+  "scores": {
+    "zero_shot": 0.537051,
+    "behavioural": 0.921626,
+    "probe": 0.981564,
+    "elicited": null,
+    "readout_budget": {
+      "n_components": 64,
+      "C": 1.0,
+      "max_iter": 2000,
+      "metric": "macro_f1"
+    },
+    "probe_best_layer": "layer-22",
+    "layer_selection": "validation",
+    "effective_width": {
+      "behavioural": 64,
+      "probe": 64,
+      "budget": 64
+    }
+  },
+  "derived": {
+    "elicitation_gap": 0.059938,
+    "recoverability": null,
+    "headroom": -0.910596
+  },
+  "baselines": {
+    "majority_class": 0.113468,
+    "length_only": 0.134023,
+    "composition_pca50_logreg": 0.129535,
+    "composition_centroid": 0.535463,
+    "homology_nearest_neighbour": 0.877352
+  },
+  "controls": {
+    "group_stratified": true,
+    "group_key": "homology_cluster",
+    "n_groups_train": 247,
+    "n_groups_test": 245,
+    "null": {
+      "method": "covariate-matched label permutation (10 quantile bins)",
+      "n_permutations": 1000,
+      "matched_covariate": "sequence_length",
+      "p_value": 0.000999000999000999,
+      "null_mean": 0.09171577960393396,
+      "null_std": 0.014413106364476257,
+      "observed": 0.9815643180349063
+    },
+    "ceiling": {
+      "method": "empirical: best of {scaled, unscaled} x {raw, pca50, pca128} x {C=1, C=0.1} logistic regression; configuration chosen on a validation carve of the training set (validation), then refit on the full training set and scored once on test",
+      "value": 0.5137475002508821,
+      "note": "Won by scaled/pca50/C=1. Interpret model scores relative to this: at or above it, the representation adds nothing over standard supervised practice on the raw features."
+    },
+    "ceiling_not_applicable": null,
+    "extra": {
+      "clustering": "DIAMOND all-vs-all, single-linkage at >=30% identity and >=50% query coverage",
+      "n_clusters_total": 517,
+      "elicited_curve": {},
+      "elicited_budget": {},
+      "per_layer_scores": {
+        "layer-0": 0.345528,
+        "layer-1": 0.449112,
+        "layer-2": 0.432835,
+        "layer-3": 0.50074,
+        "layer-4": 0.594407,
+        "layer-5": 0.650385,
+        "layer-6": 0.719071,
+        "layer-7": 0.781942,
+        "layer-8": 0.843772,
+        "layer-9": 0.897741,
+        "layer-10": 0.935549,
+        "layer-11": 0.972808,
+        "layer-12": 0.984121,
+        "layer-13": 0.990155,
+        "layer-14": 0.986917,
+        "layer-15": 0.986917,
+        "layer-16": 0.98078,
+        "layer-17": 0.98078,
+        "layer-18": 0.98078,
+        "layer-19": 0.98078,
+        "layer-20": 0.98078,
+        "layer-21": 0.98078,
+        "layer-22": 0.981564,
+        "layer-23": 0.984689,
+        "layer-24": 0.975604,
+        "layer-25": 0.979271,
+        "layer-26": 0.979271,
+        "layer-27": 0.981499,
+        "layer-28": 0.981499,
+        "layer-29": 0.979271,
+        "layer-30": 0.981499,
+        "layer-31": 0.981499,
+        "layer-32": 0.987235,
+        "layer-33": 0.987879,
+        "layer-34": 0.969862,
+        "layer-35": 0.983164,
+        "layer-36": 0.921626
+      },
+      "class_balance": {
+        "C2H2 ZF": 667,
+        "Forkhead": 49,
+        "HMG/Sox": 29,
+        "Homeodomain": 193,
+        "THAP finger": 12,
+        "bHLH": 99,
+        "bZIP": 53
+      },
+      "split_report": {
+        "n_units_dropped": 138,
+        "labels_dropped": [
+          "CENPB",
+          "E2F",
+          "Ets",
+          "Homeodomain; POU",
+          "Myb/SANT",
+          "Nuclear receptor",
+          "T-box"
+        ],
+        "n_classes_scored": 7,
+        "n_classes_total": 14,
+        "min_label_count": 5
+      },
+      "n_bootstrap_usable": 2000
+    }
+  },
+  "uncertainty": {
+    "ci95": [
+      0.930092433929617,
+      1.0
+    ],
+    "n_bootstrap": 2000,
+    "std": 0.021869103159248303,
+    "gap_ci95": [
+      -0.014752971565145646,
+      0.14922750988117742
+    ],
+    "gap_positive_fraction": 0.904,
+    "rank_reversal_risk": {}
+  },
+  "compute": {
+    "device": "cuda",
+    "seconds": 1279.16,
+    "gpu_hours": null,
+    "peak_memory_gb": null
+  },
+  "provenance": {
+    "code_commit": null,
+    "run_id": "b562e02645ea",
+    "run_date": "2026-08-21T21:10:05+00:00",
+    "seed": 5,
+    "env_lock_sha256": null,
+    "harness_version": "1.0"
+  },
+  "disclosure_tier": 0,
+  "caveats": [
+    "Split dropped 138 units and 7 class(es) too rare to appear on both sides (CENPB, E2F, Ets, Homeodomain; POU, Myb/SANT, Nuclear receptor). The score is a macro average over 7 classes, not the full inventory, and is easier than the full task.",
+    "Exceeds the empirical ceiling (0.514): the representation adds over the best cheap supervised readout of composition features.",
+    "Elicitation gap +0.0599 has a paired 95% interval [-0.0148, +0.1492] spanning zero (positive in 90% of cluster resamples); not distinguishable from no gap on this dataset.",
+    "Fine-tuning (F) not measured: adapter does not support it."
+  ]
+}

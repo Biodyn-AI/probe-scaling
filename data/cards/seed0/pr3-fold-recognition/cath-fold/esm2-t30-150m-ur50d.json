@@ -1,0 +1,261 @@
+{
+  "schema_version": "0.1",
+  "model": {
+    "id": "esm2-t30-150m-ur50d",
+    "modality": "protein",
+    "params": 150000000,
+    "checkpoint_sha256": null,
+    "release_date": "2022-08",
+    "family": "ESM2",
+    "source": "facebook/esm2_t30_150M_UR50D",
+    "notes": "30 layers, hidden 640, truncated at 1022 residues, float32 weights. Protein embedding = mean over residue positions, excluding <cls>, <eos> and padding."
+  },
+  "task": {
+    "id": "pr3-fold-recognition",
+    "version": "1.0",
+    "axis": [
+      "A3",
+      "A5"
+    ],
+    "metric": "macro_f1",
+    "dataset_id": "cath-fold",
+    "dataset_sha256": "37e9e4e59a0359c9d35d5e803e2f74cf440a22df606ce9ef08d1e9ac981c5100",
+    "n_units": 3584,
+    "higher_is_better": true
+  },
+  "scores": {
+    "zero_shot": 0.364568,
+    "behavioural": 0.489894,
+    "probe": 0.533761,
+    "elicited": 0.553791,
+    "readout_budget": {
+      "n_components": 64,
+      "C": 1.0,
+      "max_iter": 2000,
+      "metric": "macro_f1"
+    },
+    "probe_best_layer": "layer-18",
+    "layer_selection": "validation",
+    "effective_width": {
+      "behavioural": 64,
+      "probe": 64,
+      "budget": 64
+    }
+  },
+  "derived": {
+    "elicitation_gap": 0.043867,
+    "recoverability": 0.063897,
+    "headroom": -1.933502
+  },
+  "baselines": {
+    "majority_class": 0.012975,
+    "length_only": 0.097405,
+    "composition_pca50_logreg": 0.081215,
+    "composition_centroid": 0.226178,
+    "homology_nearest_neighbour": 0.022638
+  },
+  "controls": {
+    "group_stratified": true,
+    "group_key": "cath_superfamily",
+    "n_groups_train": 1543,
+    "n_groups_test": 655,
+    "null": {
+      "method": "covariate-matched label permutation (10 quantile bins)",
+      "n_permutations": 1000,
+      "matched_covariate": "domain_length",
+      "p_value": 0.000999000999000999,
+      "null_mean": 0.09923494021942145,
+      "null_std": 0.008756796431133149,
+      "observed": 0.5337611194031469
+    },
+    "ceiling": {
+      "method": "empirical: best of {scaled, unscaled} x {raw, pca50, pca128} x {C=1, C=0.1} logistic regression; configuration chosen on a validation carve of the training set (validation), then refit on the full training set and scored once on test",
+      "value": 0.18878155020824935,
+      "note": "Won by scaled/pca50/C=1. Interpret model scores relative to this: at or above it, the representation adds nothing over standard supervised practice on the raw features."
+    },
+    "ceiling_not_applicable": null,
+    "extra": {
+      "clustering": "DIAMOND all-vs-all, single-linkage at >=30% identity and >=50% query coverage, then unioned with CATH homologous superfamily",
+      "n_groups_total": 2198,
+      "n_identity_clusters": 3102,
+      "n_superfamilies": 2229,
+      "n_superfamilies_leaked_across_split": 0,
+      "superfamilies_per_class_train": {
+        "1.10.10": 137,
+        "1.10.150": 51,
+        "1.10.287": 100,
+        "1.10.8": 70,
+        "1.20.120": 112,
+        "1.20.5": 83,
+        "1.20.58": 108,
+        "1.25.40": 60,
+        "2.30.30": 64,
+        "2.40.128": 47,
+        "2.40.50": 47,
+        "2.60.120": 82,
+        "2.60.40": 235,
+        "3.30.70": 181,
+        "3.40.50": 188
+      },
+      "elicited_curve": {
+        "25": 0.13989842381261103,
+        "50": 0.310476169558389,
+        "100": 0.4156349096602881,
+        "200": 0.537477711272253,
+        "400": 0.5537907932790913
+      },
+      "elicited_budget": {
+        "method": "LoRA + linear head",
+        "steps": 400,
+        "lr": 0.001,
+        "head_lr": 0.01,
+        "batch_size": 8,
+        "lora_r": 8,
+        "lora_alpha": 16,
+        "warmup_fraction": 0.1,
+        "normalise_pooled": true,
+        "examples_seen": 3200,
+        "checkpoints": [
+          25,
+          50,
+          100,
+          200,
+          400
+        ]
+      },
+      "per_layer_scores": {
+        "layer-0": 0.170668,
+        "layer-1": 0.279608,
+        "layer-2": 0.265353,
+        "layer-3": 0.33281,
+        "layer-4": 0.354489,
+        "layer-5": 0.405296,
+        "layer-6": 0.426098,
+        "layer-7": 0.438851,
+        "layer-8": 0.474885,
+        "layer-9": 0.474839,
+        "layer-10": 0.516303,
+        "layer-11": 0.503265,
+        "layer-12": 0.539274,
+        "layer-13": 0.503111,
+        "layer-14": 0.506934,
+        "layer-15": 0.539905,
+        "layer-16": 0.526064,
+        "layer-17": 0.538127,
+        "layer-18": 0.533761,
+        "layer-19": 0.544999,
+        "layer-20": 0.540875,
+        "layer-21": 0.532493,
+        "layer-22": 0.530822,
+        "layer-23": 0.546711,
+        "layer-24": 0.546052,
+        "layer-25": 0.550991,
+        "layer-26": 0.560864,
+        "layer-27": 0.552666,
+        "layer-28": 0.540999,
+        "layer-29": 0.544312,
+        "layer-30": 0.489894
+      },
+      "per_class_f1_probe": {
+        "1.10.10": 0.461538,
+        "1.10.150": 0.350877,
+        "1.10.287": 0.33526,
+        "1.10.8": 0.189189,
+        "1.20.120": 0.5,
+        "1.20.5": 0.550336,
+        "1.20.58": 0.380952,
+        "1.25.40": 0.621359,
+        "2.30.30": 0.564103,
+        "2.40.128": 0.615385,
+        "2.40.50": 0.451613,
+        "2.60.120": 0.70073,
+        "2.60.40": 0.759494,
+        "3.30.70": 0.681319,
+        "3.40.50": 0.844262
+      },
+      "class_balance": {
+        "1.10.10": 281,
+        "1.10.150": 120,
+        "1.10.287": 293,
+        "1.10.8": 144,
+        "1.20.120": 286,
+        "1.20.5": 233,
+        "1.20.58": 254,
+        "1.25.40": 166,
+        "2.30.30": 153,
+        "2.40.128": 107,
+        "2.40.50": 126,
+        "2.60.120": 221,
+        "2.60.40": 400,
+        "3.30.70": 400,
+        "3.40.50": 400
+      },
+      "split_report": {
+        "n_units_dropped": 0,
+        "labels_dropped": [],
+        "n_classes_scored": 15,
+        "n_classes_total": 15,
+        "min_label_count": 5
+      },
+      "hit_coverage": 0.009294,
+      "hit_conditional_accuracy": 0.6,
+      "hit_n_test_with_hit": 10,
+      "hit_n_test": 1076,
+      "hit_conditional_chance_accuracy": 0.066667,
+      "homology_nearest_neighbour_max_attainable_macro_f1": 0.030501,
+      "homology_transfer_interpretation": "DIAMOND reaches 10 of 1076 test domains (0.9%); on those it transfers the topology 60% of the time against 6.7% chance. Remoteness here is a matter of how rarely similarity transfer applies, not of it failing where it does \u2014 so read these two numbers and not the nearest-neighbour macro-F1, whose floor is set by the class count",
+      "class_names": {
+        "1.10.10": "Arc Repressor Mutant, subunit A",
+        "1.10.150": "DNA polymerase; domain 1",
+        "1.10.287": "Helix Hairpins",
+        "1.10.8": "Helicase, Ruva Protein; domain 3",
+        "1.20.120": "Four Helix Bundle (Hemerythrin (Met), subunit A)",
+        "1.20.5": "Single alpha-helices involved in coiled-coils or other helix-helix interfaces",
+        "1.20.58": "Methane Monooxygenase Hydroxylase; Chain G, domain 1",
+        "1.25.40": "Serine Threonine Protein Phosphatase 5, Tetratricopeptide repeat",
+        "2.30.30": "SH3 type barrels.",
+        "2.40.128": "Lipocalin",
+        "2.40.50": "OB fold (Dihydrolipoamide Acetyltransferase, E2P)",
+        "2.60.120": "Jelly Rolls",
+        "2.60.40": "Immunoglobulin-like",
+        "3.30.70": "Alpha-Beta Plaits",
+        "3.40.50": "Rossmann fold"
+      },
+      "n_bootstrap_usable": 2000,
+      "licence": "CC BY 4.0. CATH: Protein Structure Classification Database by I. Sillitoe, N. Dawson, T. Lewis, D. Lee, J. Lees, C. Orengo, University College London (https://www.cathdb.info)",
+      "ceiling_interpretation": "comparator, not a bound: fold recognition is not a task cheap composition features can nearly solve, so a model above this value is expected rather than saturated"
+    }
+  },
+  "uncertainty": {
+    "ci95": [
+      0.4833390843627734,
+      0.5683580939699152
+    ],
+    "n_bootstrap": 2000,
+    "std": 0.021887591802125322,
+    "gap_ci95": [
+      0.005991597926505938,
+      0.07760406040975494
+    ],
+    "gap_positive_fraction": 0.9905,
+    "rank_reversal_risk": {}
+  },
+  "compute": {
+    "device": "unloaded",
+    "seconds": 3181.7,
+    "gpu_hours": null,
+    "peak_memory_gb": null
+  },
+  "provenance": {
+    "code_commit": "4b807a2",
+    "run_id": "3f07eeb8d057",
+    "run_date": "2026-08-17T15:50:04+00:00",
+    "seed": 0,
+    "env_lock_sha256": null,
+    "harness_version": "1.0"
+  },
+  "disclosure_tier": 0,
+  "caveats": [
+    "Exceeds the empirical ceiling (0.189): the representation adds over the best cheap supervised readout of composition features. On this task that is the expected outcome rather than evidence of saturation, because composition cannot nearly solve fold recognition, so the ceiling is a comparator and not an attainable maximum. `derived.headroom` is therefore negative and must not be read as headroom on PR3."
+  ]
+}

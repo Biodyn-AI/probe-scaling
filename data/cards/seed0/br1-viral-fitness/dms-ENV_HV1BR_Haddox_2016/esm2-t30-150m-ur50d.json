@@ -1,0 +1,163 @@
+{
+  "schema_version": "0.1",
+  "model": {
+    "id": "esm2-t30-150m-ur50d",
+    "modality": "protein",
+    "params": 150000000,
+    "checkpoint_sha256": null,
+    "release_date": "2022-08",
+    "family": "ESM2",
+    "source": "facebook/esm2_t30_150M_UR50D",
+    "notes": "30 layers, hidden 640, truncated at 1022 residues, float32 weights. Protein embedding = mean over residue positions, excluding <cls>, <eos> and padding."
+  },
+  "task": {
+    "id": "br1-viral-fitness",
+    "version": "1.0",
+    "axis": [
+      "A1",
+      "A5"
+    ],
+    "metric": "macro_f1",
+    "dataset_id": "dms-ENV_HV1BR_Haddox_2016",
+    "dataset_sha256": "15d85ace8df6f57b3e9d5a03f60a9d094441b3389562dbbad65773fec53a3257",
+    "n_units": 1500,
+    "higher_is_better": true
+  },
+  "scores": {
+    "zero_shot": 0.54047,
+    "behavioural": 0.562883,
+    "probe": 0.545311,
+    "elicited": null,
+    "readout_budget": {
+      "n_components": 64,
+      "C": 1.0,
+      "max_iter": 2000,
+      "metric": "macro_f1"
+    },
+    "probe_best_layer": "layer-3",
+    "layer_selection": "validation",
+    "effective_width": {
+      "behavioural": 64,
+      "probe": 64,
+      "budget": 64
+    }
+  },
+  "derived": {
+    "elicitation_gap": -0.017572,
+    "recoverability": null,
+    "headroom": -0.031952
+  },
+  "baselines": {
+    "majority_class": 0.321805,
+    "position_only": 0.527568,
+    "composition_pca50_logreg": 0.321805,
+    "composition_centroid": 0.549668
+  },
+  "controls": {
+    "group_stratified": true,
+    "group_key": "position",
+    "n_groups_train": 437,
+    "n_groups_test": 184,
+    "null": {
+      "method": "covariate-matched label permutation (10 quantile bins)",
+      "n_permutations": 1000,
+      "matched_covariate": "mutated_position",
+      "p_value": 0.017982017982017984,
+      "null_mean": 0.4977992110577289,
+      "null_std": 0.023763205709692155,
+      "observed": 0.5453114779897412
+    },
+    "ceiling": {
+      "method": "empirical: best of {scaled, unscaled} x {raw, pca50, pca128} x {C=1, C=0.1} logistic regression; configuration chosen on a validation carve of the training set (validation), then refit on the full training set and scored once on test",
+      "value": 0.5454545454545454,
+      "note": "Won by scaled/pca50/C=1. Interpret model scores relative to this: at or above it, the representation adds nothing over standard supervised practice on the raw features."
+    },
+    "ceiling_not_applicable": null,
+    "extra": {
+      "clustering": "position-disjoint: mutations at a given residue are confined to one side of the split, so the probe cannot score by learning which positions matter",
+      "n_clusters_total": 621,
+      "elicited_curve": {},
+      "elicited_budget": {},
+      "per_layer_scores": {
+        "layer-0": 0.518762,
+        "layer-1": 0.538419,
+        "layer-2": 0.532142,
+        "layer-3": 0.545311,
+        "layer-4": 0.564071,
+        "layer-5": 0.536576,
+        "layer-6": 0.560922,
+        "layer-7": 0.569843,
+        "layer-8": 0.572028,
+        "layer-9": 0.587565,
+        "layer-10": 0.580634,
+        "layer-11": 0.563116,
+        "layer-12": 0.589768,
+        "layer-13": 0.596403,
+        "layer-14": 0.586687,
+        "layer-15": 0.5898,
+        "layer-16": 0.560922,
+        "layer-17": 0.567551,
+        "layer-18": 0.547563,
+        "layer-19": 0.565408,
+        "layer-20": 0.549809,
+        "layer-21": 0.576497,
+        "layer-22": 0.558202,
+        "layer-23": 0.553762,
+        "layer-24": 0.549889,
+        "layer-25": 0.558446,
+        "layer-26": 0.560195,
+        "layer-27": 0.546492,
+        "layer-28": 0.506691,
+        "layer-29": 0.524655,
+        "layer-30": 0.562883
+      },
+      "class_balance": {
+        "0": 744,
+        "1": 756
+      },
+      "split_report": {
+        "n_units_dropped": 0,
+        "labels_dropped": [],
+        "n_classes_scored": 2,
+        "n_classes_total": 2,
+        "min_label_count": 5
+      },
+      "n_bootstrap_usable": 2000
+    }
+  },
+  "uncertainty": {
+    "ci95": [
+      0.4940670741292578,
+      0.5947974730583426
+    ],
+    "n_bootstrap": 2000,
+    "std": 0.02618477071221803,
+    "gap_ci95": [
+      -0.0635603394176307,
+      0.0282637647360616
+    ],
+    "gap_positive_fraction": 0.235,
+    "rank_reversal_risk": {}
+  },
+  "compute": {
+    "device": "unloaded",
+    "seconds": 54.97,
+    "gpu_hours": null,
+    "peak_memory_gb": null
+  },
+  "provenance": {
+    "code_commit": null,
+    "run_id": "2bdb890fe7a5",
+    "run_date": "2026-08-18T10:25:48+00:00",
+    "seed": 0,
+    "env_lock_sha256": null,
+    "harness_version": "1.0"
+  },
+  "disclosure_tier": 0,
+  "caveats": [
+    "Position alone reaches 0.528 macro-F1: much of this task is which residue was hit, not what it was changed to.",
+    "Exceeds the empirical ceiling (0.545): the representation adds over the best cheap supervised readout of composition features.",
+    "Elicitation gap -0.0176 has a paired 95% interval [-0.0636, +0.0283] spanning zero (positive in 24% of cluster resamples); not distinguishable from no gap on this dataset.",
+    "Fine-tuning (F) not measured: adapter does not support it."
+  ]
+}

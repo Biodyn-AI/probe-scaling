@@ -1,0 +1,193 @@
+{
+  "schema_version": "0.1",
+  "model": {
+    "id": "esm2-t48-15b-ur50d",
+    "modality": "protein",
+    "params": 15000000000,
+    "checkpoint_sha256": null,
+    "release_date": "2022-08",
+    "family": "ESM2",
+    "source": "facebook/esm2_t48_15B_UR50D",
+    "notes": "48 layers, hidden 5120, truncated at 1022 residues, float16 weights. Protein embedding = mean over residue positions, excluding <cls>, <eos> and padding."
+  },
+  "task": {
+    "id": "pr2-tf-family",
+    "version": "1.0",
+    "axis": [
+      "A1",
+      "A5"
+    ],
+    "metric": "macro_f1",
+    "dataset_id": "human-tf-family",
+    "dataset_sha256": "cd50918d43d05b0e5186277988f0c331d707a1444a16cbc31692f0e137a97d60",
+    "n_units": 1117,
+    "higher_is_better": true
+  },
+  "scores": {
+    "zero_shot": 0.71103,
+    "behavioural": 0.968597,
+    "probe": 0.993725,
+    "elicited": null,
+    "readout_budget": {
+      "n_components": 64,
+      "C": 1.0,
+      "max_iter": 2000,
+      "metric": "macro_f1"
+    },
+    "probe_best_layer": "layer-19",
+    "layer_selection": "validation",
+    "effective_width": {
+      "behavioural": 64,
+      "probe": 64,
+      "budget": 64
+    }
+  },
+  "derived": {
+    "elicitation_gap": 0.025128,
+    "recoverability": null,
+    "headroom": -0.778944
+  },
+  "baselines": {
+    "majority_class": 0.078583,
+    "length_only": 0.082837,
+    "composition_pca50_logreg": 0.078583,
+    "composition_centroid": 0.409006,
+    "homology_nearest_neighbour": 0.864862
+  },
+  "controls": {
+    "group_stratified": true,
+    "group_key": "homology_cluster",
+    "n_groups_train": 288,
+    "n_groups_test": 200,
+    "null": {
+      "method": "covariate-matched label permutation (10 quantile bins)",
+      "n_permutations": 1000,
+      "matched_covariate": "sequence_length",
+      "p_value": 0.000999000999000999,
+      "null_mean": 0.09630577662026531,
+      "null_std": 0.013074693414512152,
+      "observed": 0.9937245184130555
+    },
+    "ceiling": {
+      "method": "empirical: best of {scaled, unscaled} x {raw, pca50, pca128} x {C=1, C=0.1} logistic regression; configuration chosen on a validation carve of the training set (validation), then refit on the full training set and scored once on test",
+      "value": 0.5586039932770922,
+      "note": "Won by scaled/pca128/C=1. Interpret model scores relative to this: at or above it, the representation adds nothing over standard supervised practice on the raw features."
+    },
+    "ceiling_not_applicable": null,
+    "extra": {
+      "clustering": "DIAMOND all-vs-all, single-linkage at >=30% identity and >=50% query coverage",
+      "n_clusters_total": 517,
+      "per_layer_scores": {
+        "layer-0": 0.266157,
+        "layer-1": 0.305329,
+        "layer-2": 0.29877,
+        "layer-3": 0.296073,
+        "layer-4": 0.245132,
+        "layer-5": 0.304496,
+        "layer-6": 0.317015,
+        "layer-7": 0.346771,
+        "layer-8": 0.402057,
+        "layer-9": 0.416835,
+        "layer-10": 0.467505,
+        "layer-11": 0.47335,
+        "layer-12": 0.54865,
+        "layer-13": 0.681309,
+        "layer-14": 0.683143,
+        "layer-15": 0.848217,
+        "layer-16": 0.861176,
+        "layer-17": 0.981741,
+        "layer-18": 0.989796,
+        "layer-19": 0.993725,
+        "layer-20": 0.991011,
+        "layer-21": 0.977311,
+        "layer-22": 0.910789,
+        "layer-23": 0.947207,
+        "layer-24": 0.992786,
+        "layer-25": 0.991898,
+        "layer-26": 0.984009,
+        "layer-27": 0.984009,
+        "layer-28": 0.984893,
+        "layer-29": 0.984893,
+        "layer-30": 0.984893,
+        "layer-31": 0.984893,
+        "layer-32": 0.992786,
+        "layer-33": 0.992786,
+        "layer-34": 0.984893,
+        "layer-35": 0.984893,
+        "layer-36": 0.984893,
+        "layer-37": 0.965741,
+        "layer-38": 0.984893,
+        "layer-39": 0.992786,
+        "layer-40": 0.984893,
+        "layer-41": 0.984893,
+        "layer-42": 0.992786,
+        "layer-43": 0.992786,
+        "layer-44": 0.992786,
+        "layer-45": 0.992786,
+        "layer-46": 0.992786,
+        "layer-47": 0.992786,
+        "layer-48": 0.968597
+      },
+      "class_balance": {
+        "C2H2 ZF": 667,
+        "Ets": 27,
+        "Forkhead": 49,
+        "HMG/Sox": 29,
+        "Homeodomain": 193,
+        "bHLH": 99,
+        "bZIP": 53
+      },
+      "split_report": {
+        "n_units_dropped": 123,
+        "labels_dropped": [
+          "CENPB",
+          "E2F",
+          "Homeodomain; POU",
+          "Myb/SANT",
+          "Nuclear receptor",
+          "T-box",
+          "THAP finger"
+        ],
+        "n_classes_scored": 7,
+        "n_classes_total": 14,
+        "min_label_count": 5
+      },
+      "n_bootstrap_usable": 2000
+    }
+  },
+  "uncertainty": {
+    "ci95": [
+      0.8505209381295745,
+      1.0
+    ],
+    "n_bootstrap": 2000,
+    "std": 0.03382607555818307,
+    "gap_ci95": [
+      -0.015084133433955852,
+      0.06547651130701071
+    ],
+    "gap_positive_fraction": 0.8335,
+    "rank_reversal_risk": {}
+  },
+  "compute": {
+    "device": "unloaded",
+    "seconds": 754.83,
+    "gpu_hours": null,
+    "peak_memory_gb": null
+  },
+  "provenance": {
+    "code_commit": null,
+    "run_id": "12fc03e33336",
+    "run_date": "2026-08-17T05:35:55+00:00",
+    "seed": 0,
+    "env_lock_sha256": null,
+    "harness_version": "1.0"
+  },
+  "disclosure_tier": 0,
+  "caveats": [
+    "Split dropped 123 units and 7 class(es) too rare to appear on both sides (CENPB, E2F, Homeodomain; POU, Myb/SANT, Nuclear receptor, T-box). The score is a macro average over 7 classes, not the full inventory, and is easier than the full task.",
+    "Exceeds the empirical ceiling (0.559): the representation adds over the best cheap supervised readout of composition features.",
+    "Elicitation gap +0.0251 has a paired 95% interval [-0.0151, +0.0655] spanning zero (positive in 83% of cluster resamples); not distinguishable from no gap on this dataset.",
+    "Fine-tuning (F) not measured: adapter does not support it."
+  ]
+}

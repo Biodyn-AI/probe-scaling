@@ -1,0 +1,4 @@
+# Reproducing the paper needs only these. No GPU, no model weights, no network.
+pydantic>=2.0
+matplotlib>=3.7
+pytest>=7.0

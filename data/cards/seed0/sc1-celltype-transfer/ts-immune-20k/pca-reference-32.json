@@ -1,0 +1,120 @@
+{
+  "schema_version": "0.1",
+  "model": {
+    "id": "pca-reference-32",
+    "modality": "single-cell",
+    "params": 0,
+    "checkpoint_sha256": null,
+    "release_date": null,
+    "family": null,
+    "source": "probe.adapters.reference.PCAReference",
+    "notes": "Not a foundation model. Included as the reference every model must beat before its score means anything."
+  },
+  "task": {
+    "id": "sc1-celltype-transfer",
+    "version": "1.0",
+    "axis": [
+      "A1",
+      "A3"
+    ],
+    "metric": "macro_f1",
+    "dataset_id": "ts-immune-20k",
+    "dataset_sha256": "4322da8dd164ac32f30a5f5f6039c3bd75375e4b17ef4ac99fd3d70a080c543a",
+    "n_units": 7947,
+    "higher_is_better": true
+  },
+  "scores": {
+    "zero_shot": 0.484207,
+    "behavioural": 0.530575,
+    "probe": 0.530575,
+    "elicited": null,
+    "readout_budget": {
+      "n_components": 64,
+      "C": 1.0,
+      "max_iter": 2000,
+      "metric": "macro_f1"
+    },
+    "probe_best_layer": "pca-32",
+    "layer_selection": "validation",
+    "effective_width": {
+      "behavioural": 32,
+      "probe": 32,
+      "budget": 64
+    }
+  },
+  "derived": {
+    "elicitation_gap": 0.0,
+    "recoverability": null,
+    "headroom": 0.045668
+  },
+  "baselines": {
+    "majority_class": 0.015011,
+    "library_size_only": 0.018342,
+    "pca50_logreg": 0.555965,
+    "nearest_centroid_raw": 0.549885
+  },
+  "controls": {
+    "group_stratified": true,
+    "group_key": "donor_id",
+    "n_groups_train": 14,
+    "n_groups_test": 8,
+    "null": {
+      "method": "covariate-matched label permutation (10 quantile bins)",
+      "n_permutations": 1000,
+      "matched_covariate": "total_counts",
+      "p_value": 0.000999000999000999,
+      "null_mean": 0.04496134831167649,
+      "null_std": 0.0030793905630146336,
+      "observed": 0.5305747728892193
+    },
+    "ceiling": {
+      "method": "empirical: best of {scaled, unscaled} x {raw, pca50, pca128} x {C=1, C=0.1} logistic regression; configuration chosen on a validation carve of the training set (validation), then refit on the full training set and scored once on test",
+      "value": 0.555964542195901,
+      "note": "Won by unscaled/pca50/C=1. Interpret model scores relative to this: at or above it, the representation adds nothing over standard supervised practice on the raw features."
+    },
+    "ceiling_not_applicable": null,
+    "extra": {
+      "per_layer_scores": {
+        "hvg-scaled": 0.537723,
+        "pca-32": 0.530575,
+        "pca-128": 0.416328
+      },
+      "n_labels": 21,
+      "n_bootstrap_usable": 2000
+    }
+  },
+  "uncertainty": {
+    "ci95": [
+      0.38578654256148,
+      0.5337817378517639
+    ],
+    "n_bootstrap": 2000,
+    "std": 0.040130325138457816,
+    "gap_ci95": [
+      0.0,
+      0.0
+    ],
+    "gap_positive_fraction": 0.0,
+    "rank_reversal_risk": {}
+  },
+  "compute": {
+    "device": "cpu",
+    "seconds": 1343.77,
+    "gpu_hours": null,
+    "peak_memory_gb": null
+  },
+  "provenance": {
+    "code_commit": "08626c8",
+    "run_id": "11f0b9d10b30",
+    "run_date": "2026-08-17T06:10:19+00:00",
+    "seed": 0,
+    "env_lock_sha256": null,
+    "harness_version": "1.0"
+  },
+  "disclosure_tier": 0,
+  "caveats": [
+    "Does not beat the pca50_logreg baseline (0.556); the representation adds nothing on this task.",
+    "No elicitation gap by construction: the best internal layer is the sanctioned surface. This model exposes no separate internals to probe.",
+    "Fine-tuning (F) not measured: adapter does not support it."
+  ]
+}

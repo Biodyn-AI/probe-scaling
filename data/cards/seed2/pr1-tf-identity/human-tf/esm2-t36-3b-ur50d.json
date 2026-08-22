@@ -1,0 +1,168 @@
+{
+  "schema_version": "0.1",
+  "model": {
+    "id": "esm2-t36-3b-ur50d",
+    "modality": "protein",
+    "params": 3000000000,
+    "checkpoint_sha256": null,
+    "release_date": "2022-08",
+    "family": "ESM2",
+    "source": "facebook/esm2_t36_3B_UR50D",
+    "notes": "36 layers, hidden 2560, truncated at 1022 residues, float32 weights. Protein embedding = mean over residue positions, excluding <cls>, <eos> and padding."
+  },
+  "task": {
+    "id": "pr1-tf-identity",
+    "version": "1.0",
+    "axis": [
+      "A1",
+      "A5"
+    ],
+    "metric": "macro_f1",
+    "dataset_id": "human-tf",
+    "dataset_sha256": "1b11c383d009a7c4b6ad7e33b81d5ecebe5789e5bc3368b29b54f31b093879b9",
+    "n_units": 2400,
+    "higher_is_better": true
+  },
+  "scores": {
+    "zero_shot": 0.761552,
+    "behavioural": 0.915438,
+    "probe": 0.930892,
+    "elicited": null,
+    "readout_budget": {
+      "n_components": 64,
+      "C": 1.0,
+      "max_iter": 2000,
+      "metric": "macro_f1"
+    },
+    "probe_best_layer": "layer-34",
+    "layer_selection": "validation",
+    "effective_width": {
+      "behavioural": 64,
+      "probe": 64,
+      "budget": 64
+    }
+  },
+  "derived": {
+    "elicitation_gap": 0.015454,
+    "recoverability": null,
+    "headroom": -0.168996
+  },
+  "baselines": {
+    "majority_class": 0.425837,
+    "length_only": 0.425837,
+    "composition_pca50_logreg": 0.624979,
+    "composition_centroid": 0.776536,
+    "homology_nearest_neighbour": 0.893451
+  },
+  "controls": {
+    "group_stratified": true,
+    "group_key": "homology_cluster",
+    "n_groups_train": 1088,
+    "n_groups_test": 543,
+    "null": {
+      "method": "covariate-matched label permutation (10 quantile bins)",
+      "n_permutations": 1000,
+      "matched_covariate": "sequence_length",
+      "p_value": 0.000999000999000999,
+      "null_mean": 0.44449365078345404,
+      "null_std": 0.01950509349235318,
+      "observed": 0.9308916393028543
+    },
+    "ceiling": {
+      "method": "empirical: best of {scaled, unscaled} x {raw, pca50, pca128} x {C=1, C=0.1} logistic regression; configuration chosen on a validation carve of the training set (validation), then refit on the full training set and scored once on test",
+      "value": 0.7963172985027078,
+      "note": "Won by scaled/pca128/C=1. Interpret model scores relative to this: at or above it, the representation adds nothing over standard supervised practice on the raw features."
+    },
+    "ceiling_not_applicable": null,
+    "extra": {
+      "clustering": "DIAMOND all-vs-all, single-linkage at >=30% identity and >=50% query coverage",
+      "n_clusters_total": 1631,
+      "elicited_curve": {},
+      "elicited_budget": {},
+      "per_layer_scores": {
+        "layer-0": 0.757158,
+        "layer-1": 0.777685,
+        "layer-2": 0.798252,
+        "layer-3": 0.822876,
+        "layer-4": 0.837274,
+        "layer-5": 0.83421,
+        "layer-6": 0.850341,
+        "layer-7": 0.856023,
+        "layer-8": 0.874735,
+        "layer-9": 0.893852,
+        "layer-10": 0.891787,
+        "layer-11": 0.900368,
+        "layer-12": 0.90167,
+        "layer-13": 0.918818,
+        "layer-14": 0.919695,
+        "layer-15": 0.919407,
+        "layer-16": 0.928436,
+        "layer-17": 0.922791,
+        "layer-18": 0.93235,
+        "layer-19": 0.93235,
+        "layer-20": 0.934529,
+        "layer-21": 0.934529,
+        "layer-22": 0.937946,
+        "layer-23": 0.934296,
+        "layer-24": 0.935776,
+        "layer-25": 0.93235,
+        "layer-26": 0.928693,
+        "layer-27": 0.928693,
+        "layer-28": 0.928693,
+        "layer-29": 0.928947,
+        "layer-30": 0.930397,
+        "layer-31": 0.93235,
+        "layer-32": 0.93406,
+        "layer-33": 0.93406,
+        "layer-34": 0.930892,
+        "layer-35": 0.925036,
+        "layer-36": 0.915438
+      },
+      "class_balance": {
+        "TF": 800,
+        "non-TF": 1600
+      },
+      "split_report": {
+        "n_units_dropped": 0,
+        "labels_dropped": [],
+        "n_classes_scored": 2,
+        "n_classes_total": 2,
+        "min_label_count": 5
+      },
+      "n_bootstrap_usable": 2000
+    }
+  },
+  "uncertainty": {
+    "ci95": [
+      0.9062836347152441,
+      0.9512210913351781
+    ],
+    "n_bootstrap": 2000,
+    "std": 0.01143505299324224,
+    "gap_ci95": [
+      0.0008774213787433374,
+      0.03287570309150712
+    ],
+    "gap_positive_fraction": 0.9785,
+    "rank_reversal_risk": {}
+  },
+  "compute": {
+    "device": "cuda",
+    "seconds": 855.79,
+    "gpu_hours": null,
+    "peak_memory_gb": null
+  },
+  "provenance": {
+    "code_commit": null,
+    "run_id": "d9de3f66d215",
+    "run_date": "2026-08-21T15:36:23+00:00",
+    "seed": 2,
+    "env_lock_sha256": null,
+    "harness_version": "1.0"
+  },
+  "disclosure_tier": 0,
+  "caveats": [
+    "Exceeds the empirical ceiling (0.796): the representation adds over the best cheap supervised readout of composition features.",
+    "Fine-tuning (F) not measured: adapter does not support it."
+  ]
+}

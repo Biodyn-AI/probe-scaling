@@ -1,0 +1,288 @@
+{
+  "schema_version": "0.1",
+  "model": {
+    "id": "esm2-t30-150m-ur50d",
+    "modality": "protein",
+    "params": 150000000,
+    "checkpoint_sha256": null,
+    "release_date": "2022-08",
+    "family": "ESM2",
+    "source": "facebook/esm2_t30_150M_UR50D",
+    "notes": "30 layers, hidden 640, truncated at 1022 residues, float32 weights. Protein embedding = mean over residue positions, excluding <cls>, <eos> and padding."
+  },
+  "task": {
+    "id": "pr4-ec-number",
+    "version": "1.0",
+    "axis": [
+      "A3",
+      "A4"
+    ],
+    "metric": "macro_f1",
+    "dataset_id": "swissprot-ec",
+    "dataset_sha256": "7a17d735ebc2e0bf9f3604133c578ff2d22bf7041677ba90d90cec397e4f932b",
+    "n_units": 2605,
+    "higher_is_better": true
+  },
+  "scores": {
+    "zero_shot": 0.242583,
+    "behavioural": 0.303158,
+    "probe": 0.37912,
+    "elicited": 0.46006,
+    "readout_budget": {
+      "n_components": 64,
+      "C": 1.0,
+      "max_iter": 2000,
+      "metric": "macro_f1"
+    },
+    "probe_best_layer": "layer-27",
+    "layer_selection": "validation",
+    "effective_width": {
+      "behavioural": 64,
+      "probe": 64,
+      "budget": 64
+    }
+  },
+  "derived": {
+    "elicitation_gap": 0.075962,
+    "recoverability": 0.156902,
+    "headroom": -3.296654
+  },
+  "baselines": {
+    "majority_class": 0.008463,
+    "length_only": 0.031189,
+    "composition_pca50_logreg": 0.076016,
+    "composition_centroid": 0.146232,
+    "homology_nearest_neighbour": 0.129617
+  },
+  "controls": {
+    "group_stratified": true,
+    "group_key": "protein_family_branch",
+    "n_groups_train": 939,
+    "n_groups_test": 431,
+    "null": {
+      "method": "covariate-matched label permutation (10 quantile bins)",
+      "n_permutations": 1000,
+      "matched_covariate": "sequence_length",
+      "p_value": 0.000999000999000999,
+      "null_mean": 0.07315636642600137,
+      "null_std": 0.009450794717281809,
+      "observed": 0.379119791591844
+    },
+    "ceiling": {
+      "method": "empirical: best of {scaled, unscaled} x {raw, pca50, pca128} x {C=1, C=0.1} logistic regression; configuration chosen on a validation carve of the training set (validation), then refit on the full training set and scored once on test",
+      "value": 0.10707402767790235,
+      "note": "Won by scaled/raw/C=0.1. Interpret model scores relative to this: at or above it, the representation adds nothing over standard supervised practice on the raw features."
+    },
+    "ceiling_not_applicable": null,
+    "extra": {
+      "clustering": "DIAMOND all-vs-all, single-linkage at >=30% identity and >=50% query coverage, then unioned with every prefix of the UniProt protein-family path",
+      "n_groups_total": 1370,
+      "n_identity_clusters": 1764,
+      "n_family_branches": 1398,
+      "n_family_roots": 1414,
+      "n_root_families_leaked_across_split": 0,
+      "collision_branch_purity": 0.939199,
+      "collision_units_in_single_class_branch": 0.86833,
+      "collision_n_branches": 1398,
+      "collision_branches_per_class_train": {
+        "1.1": 36,
+        "1.14": 46,
+        "1.3": 29,
+        "2.1": 43,
+        "2.3": 124,
+        "2.4": 78,
+        "2.7": 136,
+        "3.1": 128,
+        "3.2": 58,
+        "3.4": 103,
+        "3.5": 58,
+        "3.6": 59,
+        "4.1": 50,
+        "4.2": 54,
+        "6.3": 40
+      },
+      "collision_min_branches_per_class_train": 29,
+      "collision_largest_branch_share_per_class": {
+        "1.1": 0.022901,
+        "1.14": 0.017964,
+        "1.3": 0.030928,
+        "2.1": 0.02,
+        "2.3": 0.01,
+        "2.4": 0.01,
+        "2.7": 0.005,
+        "3.1": 0.005,
+        "3.2": 0.015,
+        "3.4": 0.01,
+        "3.5": 0.017045,
+        "3.6": 0.015,
+        "4.1": 0.017241,
+        "4.2": 0.017341,
+        "6.3": 0.021898
+      },
+      "collision_max_branch_share": 0.030928,
+      "collision_n_split_groups": 1370,
+      "collision_interpretation": "93.9% of family branches host exactly one EC subclass, so knowing the branch nearly settles the label \u2014 which is why holding branches out is a real intervention. The reverse does not hold: the thinnest class was learned from 29 distinct branches and no class draws more than 3.1% of its units from a single branch, so no class is a lineage in disguise and none can be deleted by the split. The collision is one-directional, which is the survivable direction",
+      "elicited_curve": {
+        "25": 0.12648442912349908,
+        "50": 0.22910731219410696,
+        "100": 0.3336293022725838,
+        "200": 0.3584645958462105,
+        "400": 0.4600604023801985
+      },
+      "elicited_budget": {
+        "method": "LoRA + linear head",
+        "steps": 400,
+        "lr": 0.001,
+        "head_lr": 0.01,
+        "batch_size": 8,
+        "lora_r": 8,
+        "lora_alpha": 16,
+        "warmup_fraction": 0.1,
+        "normalise_pooled": true,
+        "examples_seen": 3200,
+        "checkpoints": [
+          25,
+          50,
+          100,
+          200,
+          400
+        ]
+      },
+      "per_layer_scores": {
+        "layer-0": 0.160209,
+        "layer-1": 0.178114,
+        "layer-2": 0.189076,
+        "layer-3": 0.238635,
+        "layer-4": 0.223126,
+        "layer-5": 0.237469,
+        "layer-6": 0.285027,
+        "layer-7": 0.319381,
+        "layer-8": 0.360069,
+        "layer-9": 0.353674,
+        "layer-10": 0.339009,
+        "layer-11": 0.376068,
+        "layer-12": 0.365412,
+        "layer-13": 0.395345,
+        "layer-14": 0.405582,
+        "layer-15": 0.389926,
+        "layer-16": 0.434858,
+        "layer-17": 0.396349,
+        "layer-18": 0.408192,
+        "layer-19": 0.420532,
+        "layer-20": 0.44558,
+        "layer-21": 0.430193,
+        "layer-22": 0.399865,
+        "layer-23": 0.411528,
+        "layer-24": 0.423663,
+        "layer-25": 0.413224,
+        "layer-26": 0.425489,
+        "layer-27": 0.37912,
+        "layer-28": 0.374569,
+        "layer-29": 0.369903,
+        "layer-30": 0.303158
+      },
+      "per_class_f1_probe": {
+        "1.1": 0.342857,
+        "1.14": 0.589474,
+        "1.3": 0.076923,
+        "2.1": 0.407767,
+        "2.3": 0.360656,
+        "2.4": 0.587302,
+        "2.7": 0.340741,
+        "3.1": 0.4375,
+        "3.2": 0.564885,
+        "3.4": 0.29703,
+        "3.5": 0.173913,
+        "3.6": 0.559322,
+        "4.1": 0.206186,
+        "4.2": 0.178862,
+        "6.3": 0.56338
+      },
+      "class_balance": {
+        "1.1": 131,
+        "1.14": 167,
+        "1.3": 97,
+        "2.1": 150,
+        "2.3": 200,
+        "2.4": 200,
+        "2.7": 200,
+        "3.1": 200,
+        "3.2": 200,
+        "3.4": 200,
+        "3.5": 176,
+        "3.6": 200,
+        "4.1": 174,
+        "4.2": 173,
+        "6.3": 137
+      },
+      "split_report": {
+        "n_units_dropped": 0,
+        "labels_dropped": [],
+        "n_classes_scored": 15,
+        "n_classes_total": 15,
+        "min_label_count": 5
+      },
+      "hit_coverage": 0.107417,
+      "hit_conditional_accuracy": 0.690476,
+      "hit_n_test_with_hit": 84,
+      "hit_n_test": 782,
+      "hit_conditional_chance_accuracy": 0.066667,
+      "homology_nearest_neighbour_max_attainable_macro_f1": 0.195186,
+      "homology_transfer_interpretation": "DIAMOND reaches 84 of 782 test enzymes (10.7%); on those it transfers the EC subclass 69% of the time against 6.7% chance. Every one of those alignments is below 30% identity or below 50% coverage by construction, since anything above both was merged into the grouping. Coverage is the remoteness statistic here \u2014 a leaked split of this data doubles it \u2014 while conditional accuracy overlaps between regimes and is a backstop only",
+      "n_bootstrap_usable": 2000,
+      "licence": "CC BY 4.0, (c) UniProt Consortium (https://www.uniprot.org/help/license)",
+      "loader_leakage": {
+        "method": "group-disjoint split over the annotation-only family grouping, test_fraction=0.3, seeds=[0, 1, 2, 3, 4]; fractions are of test units and identity clustering is not applied, which can only make the real split stricter",
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "mean_test_units": 783.0,
+        "root_family_mean": 0.0,
+        "exact_string_mean": 0.0,
+        "shared_leaf_across_roots_mean": 0.013283,
+        "root_family_max": 0.0,
+        "exact_string_max": 0.0,
+        "shared_leaf_across_roots_max": 0.023018
+      },
+      "ceiling_interpretation": "comparator, not a bound: cross-family enzyme-class transfer is not something cheap composition features can nearly solve, so a model above this value is expected rather than saturated, and `derived.headroom` must not be read as headroom on PR4",
+      "comparability": "not comparable to CARE's 51.4% BLASTp / 55.1% CLEAN: CARE splits at 30% identity, which leaves a test enzyme's own family in training, while this split removes the family. On this same data a random unit-level split lets the homology lookup alone reach 0.63-0.69 macro-F1 against 0.13 here"
+    }
+  },
+  "uncertainty": {
+    "ci95": [
+      0.3334512724543534,
+      0.41653132276834215
+    ],
+    "n_bootstrap": 2000,
+    "std": 0.02127836086286336,
+    "gap_ci95": [
+      0.03525008197970285,
+      0.11550593016055834
+    ],
+    "gap_positive_fraction": 1.0,
+    "rank_reversal_risk": {}
+  },
+  "compute": {
+    "device": "cuda",
+    "seconds": 547.72,
+    "gpu_hours": null,
+    "peak_memory_gb": null
+  },
+  "provenance": {
+    "code_commit": null,
+    "run_id": "b065cfe615db",
+    "run_date": "2026-08-18T14:27:47+00:00",
+    "seed": 0,
+    "env_lock_sha256": null,
+    "harness_version": "1.0"
+  },
+  "disclosure_tier": 0,
+  "caveats": [
+    "Exceeds the empirical ceiling (0.107): the representation adds over the best cheap supervised readout of composition features. On this task that is the expected outcome rather than evidence of saturation, because composition cannot nearly solve cross-family enzyme-class transfer, so the ceiling is a comparator and not an attainable maximum. `derived.headroom` is therefore negative and must not be read as headroom on PR4.",
+    "The empirical ceiling (0.107) is below a cheap composition baseline (0.146). The ceiling sweeps only logistic regressions, which overfit training lineages on a family-disjoint split where a nearest-centroid readout does not, so the ceiling understates what composition features yield here and `derived.headroom` is not interpretable on this card."
+  ]
+}

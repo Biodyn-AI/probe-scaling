@@ -1,0 +1,15 @@
+[project]
+name = "probe-scaling"
+version = "1.0.0"
+description = "Reproduction code for 'Same probe, different depths'"
+requires-python = ">=3.10"
+dependencies = ["pydantic>=2.0", "matplotlib>=3.7"]
+
+[project.optional-dependencies]
+test = ["pytest>=7.0"]
+
+[tool.setuptools.packages.find]
+include = ["probe_scaling*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
