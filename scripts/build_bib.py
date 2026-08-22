@@ -37,6 +37,7 @@ DOIS = {
     "voita2020mdl": "10.18653/v1/2020.emnlp-main.14",
     "schaeffer2023mirage": "10.52202/075280-2425",
     "kornblith2019transfer": "10.1109/cvpr.2019.00277",
+    "kendiukhov2026code": "10.5281/zenodo.22061975",
 }
 
 ARXIV = {

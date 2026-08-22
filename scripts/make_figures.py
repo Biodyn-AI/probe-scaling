@@ -356,7 +356,8 @@ def figure_cost():
                         markerfacecolor="white", markeredgewidth=1.2, zorder=4)
 
     ax.axhline(ceiling, color=GREY, lw=0.9, ls=(0, (4, 3)), zorder=1)
-    ax.text(math.log10(3.4e9), ceiling + 0.012, "largest budget run (400 steps)",
+    ax.text(math.log10(3.4e9), ceiling + 0.012,
+            "largest budget we ran (400 steps)",
             fontsize=7.3, color=GREY, ha="right", va="bottom")
 
     ax.set_xlabel("model size  (log$_{10}$ parameters)", fontsize=8.6)
@@ -374,14 +375,14 @@ def figure_cost():
     handles, labels = ax.get_legend_handles_labels()
     handles.append(Line2D([], [], marker="^", color=GREY, lw=0, ms=6,
                           markerfacecolor="white", markeredgewidth=1.2,
-                          label="censored: target not reached"))
+                          label="never reached 0.50 (excluded)"))
     ax.legend(handles=handles, frameon=False, fontsize=7.5, loc="upper right",
-              bbox_to_anchor=(1.0, 0.90), handlelength=1.3, labelspacing=0.35)
+              bbox_to_anchor=(1.0, 0.80), handlelength=1.3, labelspacing=0.35)
     xt = [math.log10(v) for v in (8e6, 35e6, 150e6, 650e6, 3e9)]
     ax.set_xticks(xt)
     ax.set_xticklabels(["8M", "35M", "150M", "650M", "3B"], fontsize=8)
     ax.set_xlim(math.log10(5.5e6), math.log10(5.0e9))
-    ax.set_ylim(2.04, ceiling + 0.075)
+    ax.set_ylim(2.04, ceiling + 0.065)
     fig.subplots_adjust(left=0.135, right=0.985, top=0.895, bottom=0.135)
     fig.savefig(OUT / "cost_scaling.pdf")
     fig.savefig(OUT / "cost_scaling.png")

@@ -11,6 +11,7 @@
 \usepackage[numbers,sort&compress]{natbib}
 \usepackage{caption}
 \usepackage[hidelinks]{hyperref}
+\providecommand{\doi}[1]{\href{https://doi.org/#1}{doi:#1}}
 
 \captionsetup{font=small,labelfont=bf}
 \sisetup{detect-weight=true,detect-family=true}
@@ -333,44 +334,13 @@ For the cost measurement we invert the dependent variable: we hold the
 \emph{score} fixed and measure the \emph{budget} required to reach it. Each budget
 is a separate fine-tuning run annealed to its own endpoint --- reading
 intermediate checkpoints off one long run is biased, by more than the effect under
-study (Section~\ref{sec:defects}). We ran three seeds over five rungs, with nine
-budgets (25--400 steps) in the first seed and seven (50--400) in the other two,
-and evaluated three target scores. A fourth target of 0.55 was run at the first
+study (Section~\ref{sec:defects}). We ran three seeds over five rungs, with nine budgets (25--400 steps) in the
+first seed and seven (50--400) in the other two, and evaluated three target
+scores. A model that never reaches the target within the largest budget we ran has
+no crossing point to place on the budget axis; we call such a rung
+\emph{censored}, and it is excluded from that seed's fit. A fourth target of 0.55 was run at the first
 seed and abandoned: three of five models never reached it inside the largest
 budget, leaving too few uncensored rungs to fit.
-
-\subsection{Code and reproduction}
-\label{sec:repro}
-
-Every claim maps to a script and a data directory (Table~\ref{tab:repro}), in the
-repository named under Data availability. Result cards live under
-\texttt{data/cards/seed0}--\texttt{seed5}, one directory per repeat, and the
-iso-performance sweeps under \texttt{data/sweeps/}. Reproducing every number needs
-neither a GPU nor model weights: the released cards are the input.
-
-\begin{table}[h]
-\centering
-\small
-\begin{tabular}{@{}ll@{}}
-\toprule
-\textbf{claim} & \textbf{command} \\
-\midrule
-Tables~\ref{tab:gap}, \ref{tab:families}, Figure~\ref{fig:forest} &
-\texttt{python scripts/analyse\_gap.py} \\
-Table~\ref{tab:recov} & \texttt{python scripts/analyse\_recoverability.py} \\
-Table~\ref{tab:cost}, Figure~\ref{fig:cost} & \texttt{python scripts/analyse\_cost.py} \\
-CARP width and depth (Section~\ref{sec:families}) &
-\texttt{python scripts/analyse\_carp\_geometry.py} \\
-all figures & \texttt{python scripts/make\_figures.py} \\
-bibliography & \texttt{python scripts/build\_bib.py} \\
-every published number & \texttt{pytest -q} \\
-\bottomrule
-\end{tabular}
-\caption{Every claim in this paper, and the command that reproduces it. The test
-suite re-derives each published value from the released cards and fails if it
-moves.}
-\label{tab:repro}
-\end{table}
 
 \section{Results}
 
@@ -433,7 +403,6 @@ design cannot separate them. Its ladder is also the shortest here at 0.96 decade
 models.} Any claim that it is would overreach the evidence.
 
 \subsection{A second and a third model family}
-\label{sec:families}
 
 Fifty of our sixty-nine protein cards, before CARP was added, were ESM2 ---
 forty-two trained checkpoints and eight randomly-initialised control arms. To test
@@ -530,9 +499,13 @@ Figure~\ref{fig:cost}.
 \centering
 \includegraphics[width=0.92\textwidth]{figures/cost_scaling.pdf}
 \caption{Budget required to reach a fixed macro-F1 of 0.50, against model size.
-Each budget is a separate fine-tuning run annealed to its own endpoint. Open
-triangles mark rungs censored at the grid ceiling: that model never reached the
-target inside the largest budget run, so it is excluded from its seed's fit.}
+Each point is one model in one seed, and each budget is a separate fine-tuning run
+annealed to its own endpoint. The dashed line marks the largest budget we ran, 400
+steps. The two open triangles above it are the seeds in which the smallest model
+(8M) never reached 0.50 within that budget: for those seeds no crossing point
+exists, so that model cannot be placed on the vertical axis and is left out of the
+fit. This is why seeds 0 and 1 are fitted on four rungs and seed 2 --- whose 8M
+model did reach the target, at about 354 of 400 steps --- on five.}
 \label{fig:cost}
 \end{figure}
 
@@ -789,14 +762,17 @@ argue is structural rather than incidental.
 
 \section*{Data availability}
 
+\begin{sloppypar}
 All result cards, sweep files and analysis code underlying every number in this
-paper are openly available at
-\url{https://github.com/Biodyn-AI/probe-scaling}. Result cards are under
-\texttt{data/cards/}; iso-performance sweeps under \texttt{data/sweeps/}. The
-analysis scripts, figure-generation script and bibliography generator named in
-Section~\ref{sec:repro} regenerate every figure, table and reference from those
-files. No new experimental data were generated; all model checkpoints and
+paper are openly available at \url{https://github.com/Biodyn-AI/probe-scaling},
+and archived at \doi{10.5281/zenodo.22061975}~\citep{kendiukhov2026code}. Result cards are under
+\texttt{data/cards/}; iso-performance sweeps under \texttt{data/sweeps/}. The analysis scripts, figure-generation script and bibliography generator in
+that repository regenerate every figure, table and reference in this paper from
+those files, and its test suite re-derives each published value and fails if it
+moves. Reproducing the paper requires neither a GPU nor model weights: the
+released cards are the input. No new experimental data were generated; all model checkpoints and
 benchmark datasets are third-party and cited at first use.
+\end{sloppypar}
 
 \section*{Funding}
 
@@ -820,11 +796,9 @@ arXiv API by the script \texttt{build\_bib.py}, which fails rather than emit an
 unresolvable entry. It also assisted in preparing the \LaTeX{} sources of the
 tables and figures.
 
-The scientific claims, their interpretation, and the text of this manuscript are
-the author's own. No part of the manuscript was drafted from a prompt. All
-outputs of the assistant were reviewed by the author, and every numerical result
+All outputs of the assistant were reviewed by the author, and every numerical result
 reported here was re-derived from the released result cards by the analysis
-scripts named in Section~\ref{sec:repro}.
+scripts in the repository named under Data availability.
 
 
 \bibliographystyle{plainnat}
