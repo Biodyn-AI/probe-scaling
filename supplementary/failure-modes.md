@@ -1,4 +1,4 @@
-# Twenty-nine ways an elicitation measurement flatters you
+# Supplementary Note S2 — twenty-nine ways an elicitation measurement flatters you
 
 Every defect below was found in this harness, by us, after it had produced a
 number we believed. **Of the defects that biased a number at all, every single one biased it in our
